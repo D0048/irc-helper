@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path=""/>
+	<classpathentry kind="lib" path="dependencies/pircbot-1.5.0/pircbot.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:file:/home/d0048/Program-code/netbean-java/irc-helper/dependencies/pircbot-1.5.0.zip!/pircbot-1.5.0/javadocs"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
