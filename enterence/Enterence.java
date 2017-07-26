@@ -4,6 +4,8 @@ import gui.Gui;
 import bot.MyBot;
 
 public class Enterence {
+	public static String sudoers[]={"d0048"};
+	public static String sudoPwd="123123";
 
 	/**
 	 * @param args
@@ -40,5 +42,4 @@ public class Enterence {
 			bot.joinChannel(channel);
 		}
 	}
-
 }
