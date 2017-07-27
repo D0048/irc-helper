@@ -9,5 +9,5 @@ public class Configs {
 	public static String name = "testbot";
 	public static String[] channels = { "#berton-research", "#linuxba" };
 	public static String preffix = "-";
-	public static String propFileName = "helper.properties";
+	public static String recordFileName="helper.record";
 }

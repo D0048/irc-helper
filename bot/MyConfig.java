@@ -1,14 +1,16 @@
 package bot;
 
-
-
 import java.io.File;
+import java.io.IOException;
 
 import org.apache.commons.configuration.PropertiesConfiguration;
 
 import enterence.Enterence;
+import gui.Gui;
 
 public class MyConfig {
+	File file = new File(Enterence.propFileName);
+	
 
 	public void configInit(String[] args) throws Exception {
 		/*
@@ -22,22 +24,54 @@ public class MyConfig {
 		 * Enterence.prop.putIfAbsent("sudoers", Enterence.sudoers);
 		 * Enterence.prop.store(out, null); out.close();
 		 */
-		File file = new File(Configs.propFileName);
 
-		if (!file.exists()) {
-			file.createNewFile();
-			PropertiesConfiguration config = new PropertiesConfiguration(Configs.propFileName);
-			config.addProperty("sudoers", Configs.sudoers);
-			config.addProperty("sudoPwd", Configs.sudoPwd);
-			config.addProperty("server", Configs.server);
-			config.addProperty("name", Configs.name);
-			config.addProperty("channels", Configs.channels);
-			config.addProperty("preffix", Configs.preffix);
-			config.addProperty("sudoers", Configs.sudoers);
-			config.save();
+		if (file.exists()) {
+			Gui.log("Config file found, start loading");
+			try {
+				PropertiesConfiguration config = new PropertiesConfiguration(
+						Enterence.propFileName);
+				Configs.sudoers = config.getStringArray("sudoers");
+				Configs.sudoPwd = (String) config.getString("sudoPwd");
+				Configs.server = (String) config.getString("server");
+				Configs.name = (String) config.getString("name");
+				Configs.channels = (String[]) config.getStringArray("channels");
+				Configs.preffix = (String) config.getString("preffix");
+				Configs.sudoers = (String[]) config.getStringArray("sudoers");
+				Configs.recordFileName = (String) config.getString("recordFileName");
+				if (Configs.sudoers == null || Configs.sudoPwd == null
+						|| Configs.server == null || Configs.name == null
+						|| Configs.channels == null || Configs.preffix == null
+						|| Configs.sudoers == null || Configs.recordFileName == null) {
+					throw new Exception("File damaged");
+				}
+			} catch (Exception e) {
+				Gui.displayException(e);
+				Gui.log("Config file error: " + e.getMessage()
+						+ ", creating one as default");
+				createDefault();
+			}
 		} else {
-			
+			Gui.log("Config file not found, creating one as default");
+			createDefault();
 		}
-		// prop.
+
+	}
+
+	public void createDefault() throws Exception {
+		if(file.exists()){
+			file.renameTo(new File(Enterence.propFileName+".bak"));
+		}
+		file.createNewFile();
+		PropertiesConfiguration config = new PropertiesConfiguration(
+				Enterence.propFileName);
+		config.setProperty("sudoers", Configs.sudoers);
+		config.setProperty("sudoPwd", Configs.sudoPwd);
+		config.setProperty("server", Configs.server);
+		config.setProperty("name", Configs.name);
+		config.setProperty("channels", Configs.channels);
+		config.setProperty("preffix", Configs.preffix);
+		config.setProperty("sudoers", Configs.sudoers);
+		config.setProperty("recordFileName", Configs.recordFileName);
+		config.save();
 	}
 }

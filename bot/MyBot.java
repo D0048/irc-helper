@@ -14,23 +14,20 @@ import org.apache.commons.codec.net.URLCodec;
 import org.jibble.pircbot.*;
 
 public class MyBot extends PircBot {
-	String preffix = "-";
-	HashSet<String> verifiedUsers = new HashSet<String>();
-	HashSet<String> mutedUsers = new HashSet<String>();
-	HashMap<String, HashSet<String>> records = new HashMap<String, HashSet<String>>();
 
 	public MyBot(String name, String preffix) {
 		this.setName(name);
 		if (preffix != null) {
-			this.preffix = preffix;
+			Configs.preffix = preffix;
 		}
 	}
 
 	@Override
 	public void onMessage(String channel, String sender, String login,
 			String hostname, String message) {
-		if (!this.mutedUsers.contains(sender)) {
-			if (message.startsWith(preffix)) {
+		if (!Records.mutedUsers.contains(sender)) {
+			// call handle
+			if (message.startsWith(Configs.preffix)) {
 				if (sender.contains("bot") && !isCred(sender)) {
 					this.sendMessage(channel, "Unauthorized access: \"bot\"");
 					return;
@@ -46,7 +43,9 @@ public class MyBot extends PircBot {
 					}
 				}
 			}
-
+			// apm handle
+			this.priFuncAnonymousHandle(channel, sender, login, hostname,
+					message, message.split(" "));
 			this.funcRecord(channel, sender, login, hostname, message,
 					message.split(" "));
 		}
@@ -57,96 +56,122 @@ public class MyBot extends PircBot {
 			String hostname, String message) {
 		super.onPrivateMessage(sender, login, hostname, message);
 		String[] args = message.split(" ");
-		for (String name : Configs.sudoers) {
-			if (sender == name & args[0] == preffix
-					& args[1] == Configs.sudoPwd) {
-				this.onSudoCall(sender, login, hostname, message, args);
+
+		// sudo calls
+		try {
+			for (String name : Configs.sudoers) {
+				if (sender.equals(name) & args[0].equals(Configs.preffix)
+						& args[1] != null & args[1].equals(Configs.sudoPwd)) {
+					this.onSudoCall(sender, login, hostname, message, args);
+					Gui.log(sender + " has issued an sudo call");
+				} else {
+					Gui.log(sender + " failed to authorize with: " + args[1]);
+				}
 			}
+		} catch (Exception e) {
+			Gui.log(sender + " generated an invalid private call");
+		}
+
+		// private funcs
+		try {
+			if (args[0].startsWith(Configs.preffix)) {
+				this.onPrivateCall(sender, login, hostname, message, args);
+				Gui.log(sender + " generated an successful private call");
+			}
+		} catch (Exception e) {
+			Gui.log(sender + " generated an invalid private call");
 		}
 	}
 
 	public void onSudoCall(String sender, String login, String hostname,
 			String message, String args[]) {
-		if (message
-				.startsWith(preffix + " " + Configs.sudoPwd + " " + "mute")) {
+		if (message.startsWith(Configs.preffix + " " + Configs.sudoPwd + " "
+				+ "mute")) {
 			this.funcMute(sender, login, hostname, message, args, true);
 			return;
 		}
-		if (message.startsWith(preffix + " " + Configs.sudoPwd + " "
+		if (message.startsWith(Configs.preffix + " " + Configs.sudoPwd + " "
 				+ "'mute")) {
 			this.funcMute(sender, login, hostname, message, args, false);
 			return;
 		}
 	}
 
+	public void onPrivateCall(String sender, String login, String hostname,
+			String message, String args[]) {
+		if (message.startsWith(Configs.preffix + "apm")) {
+			this.priFuncAnonymousCall(sender, login, hostname, message, args);
+		}
+	}
+
 	public void onCall(String channel, String sender, String login,
 			String hostname, String message, String args[]) {
-		if (message.startsWith(preffix + "help")) {
+		if (message.startsWith(Configs.preffix + "help")) {
 			this.funcHelp(channel, sender, login, hostname, message, args);
 			return;
 		}
 
-		if (message.startsWith(preffix + "recall")) {
+		if (message.startsWith(Configs.preffix + "recall")) {
 			this.funcRegexReCall(channel, sender, login, hostname, message,
 					args, false);
 			return;
 		}
-		if (message.startsWith(preffix + "regrecall")) {
+		if (message.startsWith(Configs.preffix + "regrecall")) {
 			this.funcRegexReCall(channel, sender, login, hostname, message,
 					args, true);
 			return;
 		}
-		if (message.startsWith(preffix + "time")) {
+		if (message.startsWith(Configs.preffix + "time")) {
 			this.funcTime(channel, sender, login, hostname, message, args);
 			return;
 		}
 
-		if (message.startsWith(preffix + "md5")) {
+		if (message.startsWith(Configs.preffix + "md5")) {
 			this.sendMessage(channel,
 					sender + ": " + function.MD5Cal.toMD5(args[1]));
 			return;
 		}
-		if (message.startsWith(preffix + "hex")) {
+		if (message.startsWith(Configs.preffix + "hex")) {
 			this.sendMessage(channel,
 					sender + ": " + HexTrans.bytesToHex(args[1].getBytes()));
 			return;
 		}
-		if (message.startsWith(preffix + "'hex")) {
+		if (message.startsWith(Configs.preffix + "'hex")) {
 			this.sendMessage(channel,
 					sender + ": " + HexTrans.hexStr2Str((args[1])));
 			return;
 		}
-		if (message.startsWith(preffix + "base32")) {
+		if (message.startsWith(Configs.preffix + "base32")) {
 			this.sendMessage(
 					channel,
 					sender + ": "
 							+ new Base32().encodeToString(args[1].getBytes()));
 			return;
 		}
-		if (message.startsWith(preffix + "'base32")) {
+		if (message.startsWith(Configs.preffix + "'base32")) {
 			this.sendMessage(channel,
 					sender + ": " + new String(new Base32().decode(args[1])));
 			return;
 		}
-		if (message.startsWith(preffix + "base64")) {
+		if (message.startsWith(Configs.preffix + "base64")) {
 			this.sendMessage(
 					channel,
 					sender + ": "
 							+ new Base64().encodeToString(args[1].getBytes()));
 			return;
 		}
-		if (message.startsWith(preffix + "'base64")) {
+		if (message.startsWith(Configs.preffix + "'base64")) {
 			this.sendMessage(channel,
 					sender + ": " + new String(new Base64().decode(args[1])));
 			return;
 		}
 		try {
-			if (message.startsWith(preffix + "urlcodec")) {
+			if (message.startsWith(Configs.preffix + "urlcodec")) {
 				this.sendMessage(channel,
 						sender + ": " + new URLCodec().encode(args[1]));
 				return;
 			}
-			if (message.startsWith(preffix + "'urlcodec")) {
+			if (message.startsWith(Configs.preffix + "'urlcodec")) {
 
 				this.sendMessage(channel, sender + ": "
 						+ new String(new URLCodec().decode(args[1])));
@@ -163,14 +188,14 @@ public class MyBot extends PircBot {
 
 	public void funcRecord(String channel, String sender, String login,
 			String hostname, String message, String args[]) {
-		if (records.containsKey(sender)) {
-			records.get(sender).add(
+		if (Records.records.containsKey(sender)) {
+			Records.records.get(sender).add(
 					"[" + new java.util.Date().toString() + "@" + channel + "]"
 							+ sender + ":" + message);
 			Gui.log("pushed:" + "[" + new java.util.Date().toString() + "@"
 					+ channel + "]" + sender + ":" + message);
 		} else {
-			records.put(sender, new HashSet<String>());
+			Records.records.put(sender, new HashSet<String>());
 		}
 	}
 
@@ -180,8 +205,8 @@ public class MyBot extends PircBot {
 		String targetContent = args[2];
 		this.sendMessage(channel, ": Searching for " + targetContent + " in "
 				+ targetUsr);
-		if (records.containsKey(targetUsr)) {// usr
-			HashSet<String> record = records.get(targetUsr);
+		if (Records.records.containsKey(targetUsr)) {// usr
+			HashSet<String> record = Records.records.get(targetUsr);
 			HashSet<String> matches = new HashSet<String>();
 
 			for (String statement : record) {// statement
@@ -218,23 +243,59 @@ public class MyBot extends PircBot {
 		return;
 	}
 
-	public void funcMute(String sender, String login, String hostname,//- pwd mute usr
+	public void funcMute(String sender, String login, String hostname,// - pwd
+																		// mute
+																		// usr
 			String message, String args[], boolean action) {
-		int i = 3;
-		for (String usr : args) {
-			if (i > 0) {
-				i--;
-				continue;
-			}
-			if (action) {
-				this.mutedUsers.add(usr);
-				this.sendMessage(sender, "User:" + usr + " muted");
-			} else {
-				this.mutedUsers.remove(usr);
-				this.sendMessage(sender, "User:" + usr + " unmuted");
-			}
+
+		if (args[4] == null) {
+			Gui.log(sender + ": usage: - sudo [pwd] [cmd] [opt]");
+		}
+		if (action) {
+			Records.mutedUsers.add(args[3]);
+			this.sendMessage(sender, "User:" + args[3] + " muted");
+		} else {
+			Records.mutedUsers.remove(args[3]);
+			this.sendMessage(sender, "User:" + args[3] + " unmuted");
 		}
 		return;
+	}
+
+	public void priFuncAnonymousCall(String sender, String login,
+			String hostname, String message, String args[]) {
+		try {
+			this.sendMessage(sender, "message will be delivered to " + args[1]
+					+ " at " + args[2]);
+			if (args[1] != null & args[2] != null & args[3] != null) {
+				String usr = args[1], channel = args[2], myMessage = "";
+				for (String msg : args) {
+					if (!msg.equals(args[0]) & !msg.equals(args[1])
+							& !msg.equals(args[2])) {
+						myMessage += msg+" ";
+					}
+				}
+				String[] queneObj = { usr, channel, myMessage };
+				Enterence.APMPool.add(queneObj);
+			} else {
+				this.sendMessage(
+						sender,
+						"Usage: -apm [usr] [channel] [msg] Deliver a anonymous message when the user showed up");
+			}
+		} catch (Exception e) {
+		}
+	}
+
+	public void priFuncAnonymousHandle(String channel, String sender,
+			String login, String hostname, String message, String args[]) {
+		for (String[] queneObj : Enterence.APMPool) {
+			// Gui.log("Handling: " + channel + "|" + queneObj[0] + "|" + sender
+			// + queneObj[1]);
+			if (channel.equals(queneObj[1]) & sender.equals(queneObj[0])) {
+				this.sendMessage(channel, sender + ",someone told you:"
+						+ queneObj[2]);
+				Enterence.APMPool.remove(queneObj);
+			}
+		}
 	}
 
 	public void funcHelp(String channel, String sender, String login,
@@ -264,11 +325,19 @@ public class MyBot extends PircBot {
 				"-urlcodec [msg] 				Encrypt a message with URLCodec\n");
 		this.sendMessage(sender,
 				"-urlcodec [msg] 				Decrypt a message with URLCodec\n");
+		this.sendMessage(sender,
+				"/msg "+Configs.name+" -apm [usr] [channel] [msg] 		Deliver an anonymous msg to that channel when the user is around\n");
 		this.sendMessage(sender, "Sudo commands:\n");
 		this.sendMessage(sender, "[hidden]");
 	}
 
 	public boolean isCred(String name) {
 		return true;
+	}
+
+	@Override
+	protected void onQuit(String sourceNick, String sourceLogin,
+			String sourceHostname, String reason) {
+		super.onQuit(sourceNick, sourceLogin, sourceHostname, reason);
 	}
 }
