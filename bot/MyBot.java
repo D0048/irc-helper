@@ -8,7 +8,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.regex.Pattern;
 
-import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.binary.Base32;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.net.URLCodec;
@@ -58,9 +57,9 @@ public class MyBot extends PircBot {
 			String hostname, String message) {
 		super.onPrivateMessage(sender, login, hostname, message);
 		String[] args = message.split(" ");
-		for (String name : Enterence.sudoers) {
+		for (String name : Configs.sudoers) {
 			if (sender == name & args[0] == preffix
-					& args[1] == Enterence.sudoPwd) {
+					& args[1] == Configs.sudoPwd) {
 				this.onSudoCall(sender, login, hostname, message, args);
 			}
 		}
@@ -68,11 +67,13 @@ public class MyBot extends PircBot {
 
 	public void onSudoCall(String sender, String login, String hostname,
 			String message, String args[]) {
-		if (message.startsWith(preffix + "mute")) {
+		if (message
+				.startsWith(preffix + " " + Configs.sudoPwd + " " + "mute")) {
 			this.funcMute(sender, login, hostname, message, args, true);
 			return;
 		}
-		if (message.startsWith(preffix + "'mute")) {
+		if (message.startsWith(preffix + " " + Configs.sudoPwd + " "
+				+ "'mute")) {
 			this.funcMute(sender, login, hostname, message, args, false);
 			return;
 		}
@@ -217,12 +218,12 @@ public class MyBot extends PircBot {
 		return;
 	}
 
-	public void funcMute(String sender, String login, String hostname,
+	public void funcMute(String sender, String login, String hostname,//- pwd mute usr
 			String message, String args[], boolean action) {
-		int i = 0;
+		int i = 3;
 		for (String usr : args) {
-			if (i == 0) {
-				i = 1;
+			if (i > 0) {
+				i--;
 				continue;
 			}
 			if (action) {
@@ -246,7 +247,7 @@ public class MyBot extends PircBot {
 				"-recall [user] [statement] 	Recall certain phases in the chat history of a user\n");
 		this.sendMessage(
 				sender,
-				"-regrecall [user] [statement] 	Recall certain phases using regex in the chat history of a user\n");
+				"-regrecall [user] [keyword] 	Recall certain phases using regex in the chat history of a user\n");
 		this.sendMessage(sender, "-time 							Get current time");
 		this.sendMessage(sender, "-md5 [msg] 					Encrypt a message with md5\n");
 		this.sendMessage(sender,
