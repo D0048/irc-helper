@@ -10,6 +10,7 @@ import java.util.Properties;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import function.NetSocket;
 import gui.Gui;
 import bot.Configs;
 import bot.MyBot;
@@ -18,6 +19,7 @@ import bot.MyRecord;
 import bot.Records;
 
 public class Enterence {
+	// TODO:serilize record
 
 	public static String propFileName = "helper.properties";
 	public static MyConfig config = new MyConfig();
@@ -25,6 +27,7 @@ public class Enterence {
 	public static MyRecord record = new MyRecord();
 	public static Records records = new Records();
 	public static HashSet<String[]> APMPool = new HashSet<String[]>();
+	public static HashSet<NetSocket> NSPool = new HashSet<NetSocket>();
 	Properties prop = new Properties();
 
 	/**

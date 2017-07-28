@@ -100,7 +100,12 @@ public class MyBot extends PircBot {
 	public void onPrivateCall(String sender, String login, String hostname,
 			String message, String args[]) {
 		if (message.startsWith(Configs.preffix + "apm")) {
-			this.priFuncAnonymousCall(sender, login, hostname, message, args);
+			this.priFuncAnonymousCall(sender, login, hostname, message, args,
+					true);
+		}
+		if (message.startsWith(Configs.preffix + "am")) {
+			this.priFuncAnonymousCall(sender, login, hostname, message, args,
+					false);
 		}
 	}
 
@@ -108,6 +113,11 @@ public class MyBot extends PircBot {
 			String hostname, String message, String args[]) {
 		if (message.startsWith(Configs.preffix + "help")) {
 			this.funcHelp(channel, sender, login, hostname, message, args);
+			return;
+		}
+		
+		if (message.startsWith(Configs.preffix + "ping")) {
+			this.sendMessage(channel, "-pong");
 			return;
 		}
 
@@ -262,26 +272,52 @@ public class MyBot extends PircBot {
 	}
 
 	public void priFuncAnonymousCall(String sender, String login,
-			String hostname, String message, String args[]) {
+			String hostname, String message, String args[], boolean isPrivate) {
 		try {
-			this.sendMessage(sender, "message will be delivered to " + args[1]
-					+ " at " + args[2]);
-			if (args[1] != null & args[2] != null & args[3] != null) {
-				String usr = args[1], channel = args[2], myMessage = "";
-				for (String msg : args) {
-					if (!msg.equals(args[0]) & !msg.equals(args[1])
-							& !msg.equals(args[2])) {
-						myMessage += msg+" ";
+			if (isPrivate) {
+				this.sendMessage(sender, "message will be delivered to "
+						+ args[1] + " at " + args[2]);
+				if (args[1] != null & args[2] != null & args[3] != null) {
+					String usr = args[1], channel = args[2], myMessage = "";
+					for (String msg : args) {
+						if (!msg.equals(args[0]) & !msg.equals(args[1])
+								& !msg.equals(args[2])) {
+							myMessage += msg + " ";
+						}
 					}
+					String[] queneObj = { usr, channel, myMessage };
+					Enterence.APMPool.add(queneObj);
+					this.sendMessage(
+							channel,
+							usr
+									+ ", you have an unread anonymous message at this channel. Reply \""
+									+ Configs.preffix + "hapm\"/\""
+									+ Configs.preffix
+									+ "papm\" to hear it here/privately.");
+				} else {
+					this.sendMessage(
+							sender,
+							"Usage: -apm [usr] [channel] [msg] Deliver a anonymous message when the user showed up");
 				}
-				String[] queneObj = { usr, channel, myMessage };
-				Enterence.APMPool.add(queneObj);
 			} else {
-				this.sendMessage(
-						sender,
-						"Usage: -apm [usr] [channel] [msg] Deliver a anonymous message when the user showed up");
+				this.sendMessage(sender, "message has been delivered to "
+						+ args[2]);
+				if (args[1] != null & args[2] != null) {// -am channel msg
+					String channel = args[1], myMessage = "";
+					for (String msg : args) {
+						if (!msg.equals(args[0]) & !msg.equals(args[1])) {
+							myMessage += msg + " ";
+						}
+					}
+					this.sendMessage(channel, "Anonymous: " + myMessage);
+				} else {
+					this.sendMessage(sender,
+							"Usage: -apm [channel] [msg] Deliver a anonymous message to a certain channel");
+				}
 			}
 		} catch (Exception e) {
+			this.funcHelp("#berton-research", sender, login, hostname, message,
+					args);
 		}
 	}
 
@@ -291,8 +327,13 @@ public class MyBot extends PircBot {
 			// Gui.log("Handling: " + channel + "|" + queneObj[0] + "|" + sender
 			// + queneObj[1]);
 			if (channel.equals(queneObj[1]) & sender.equals(queneObj[0])) {
-				this.sendMessage(channel, sender + ",someone told you:"
-						+ queneObj[2]);
+				if (message.startsWith(Configs.preffix + "papm")) {
+					this.sendMessage(sender, sender + ",someone told you:"
+							+ queneObj[2]);
+				} else if (message.startsWith(Configs.preffix + "hapm")) {
+					this.sendMessage(channel, sender + ",someone told you:"
+							+ queneObj[2]);
+				}
 				Enterence.APMPool.remove(queneObj);
 			}
 		}
@@ -303,6 +344,7 @@ public class MyBot extends PircBot {
 		this.sendMessage(channel, "Help message sent through private chat.");
 		this.sendMessage(sender, "Normal commands:\n");
 		this.sendMessage(sender, "-help 							Show this help");
+		this.sendMessage(sender, "-ping 							Check if bot is alive");
 		this.sendMessage(
 				sender,
 				"-recall [user] [statement] 	Recall certain phases in the chat history of a user\n");
@@ -325,8 +367,16 @@ public class MyBot extends PircBot {
 				"-urlcodec [msg] 				Encrypt a message with URLCodec\n");
 		this.sendMessage(sender,
 				"-urlcodec [msg] 				Decrypt a message with URLCodec\n");
-		this.sendMessage(sender,
-				"/msg "+Configs.name+" -apm [usr] [channel] [msg] 		Deliver an anonymous msg to that channel when the user is around\n");
+		this.sendMessage(
+				sender,
+				"/msg "
+						+ Configs.name
+						+ " -apm [usr] [channel] [msg] 		Deliver an anonymous msg to that channel when the user is around\n");
+		this.sendMessage(
+				sender,
+				"/msg "
+						+ Configs.name
+						+ " -am [channel] [msg] 			Deliver an anonymous msg to that channel\n");
 		this.sendMessage(sender, "Sudo commands:\n");
 		this.sendMessage(sender, "[hidden]");
 	}

@@ -45,14 +45,15 @@ public class MyRecord {
 				String[] usrEntries = config.getStringArray("usrEntries");
 				Gui.log("Users Read:" + usrEntries.toString());
 				for (String usr : usrEntries) {// per usr
-					Gui.log("loading:" + usr);
+					//Gui.log("loading:" + usr);
 					String[] statements = config.getStringArray(usr);
 					HashSet<String> statementsMap = new HashSet<String>();
 					for (String statement : statements) {// per statement
-						Gui.log("    loading:" + statement);
+						//Gui.log("    loading:" + statement);
 						statementsMap.add(statement);
 					}
 					Records.records.put(usr, statementsMap);
+					Gui.log("Record successfully loaded");
 				}
 
 				if (Records.verifiedUsers == null || Records.mutedUsers == null
