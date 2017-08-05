@@ -4,7 +4,6 @@ import enterence.Enterence;
 import function.HexTrans;
 import gui.Gui;
 
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.regex.Pattern;
 
@@ -301,7 +300,7 @@ public class MyBot extends PircBot {
 				}
 			} else {
 				this.sendMessage(sender, "message has been delivered to "
-						+ args[2]);
+						+ args[1]);
 				if (args[1] != null & args[2] != null) {// -am channel msg
 					String channel = args[1], myMessage = "";
 					for (String msg : args) {

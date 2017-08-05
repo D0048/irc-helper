@@ -1,7 +1,5 @@
 package bot;
 
-import java.util.Properties;
-
 public class Configs {
 	public static String sudoers[] = { "d0048" };
 	public static String sudoPwd = "123123";

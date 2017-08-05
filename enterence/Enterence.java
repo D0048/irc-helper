@@ -1,18 +1,12 @@
 package enterence;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.InputStream;
 import java.util.HashSet;
 import java.util.Properties;
-
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.plugin.java.JavaPlugin;
 
 import function.NetSocket;
 import gui.Gui;
 import bot.Configs;
+import bot.IRCPlugin;
 import bot.MyBot;
 import bot.MyConfig;
 import bot.MyRecord;
@@ -28,7 +22,9 @@ public class Enterence {
 	public static Records records = new Records();
 	public static HashSet<String[]> APMPool = new HashSet<String[]>();
 	public static HashSet<NetSocket> NSPool = new HashSet<NetSocket>();
+	public static HashSet<? extends IRCPlugin> PluginPool = new HashSet<IRCPlugin>();
 	Properties prop = new Properties();
+	public static MyBot bot;
 
 	/**
 	 * @param args
@@ -56,28 +52,35 @@ public class Enterence {
 			Gui.displayException(e);
 		}
 
-		MyBot bot = new MyBot(configs.name, configs.preffix);
-
+		bot = new MyBot(Configs.name, Configs.preffix);
 		// Enable debugging output.
 		bot.setVerbose(true);
 
 		boolean success = false;
 		do {
 			try {
-				Gui.log("Connecting to: " + configs.server + "\n");
-				bot.connect(configs.server);
+				Gui.log("Connecting to: " + Configs.server + "\n");
+				bot.connect(Configs.server);
 				success = true;
 				Gui.log("Successfully connected, now joining channel list!"
-						+ configs.channels.toString() + "\n");
+						+ Configs.channels.toString() + "\n");
 			} catch (Exception e) {
 				Gui.displayException(e);
 			}
 		} while (!success);
 
 		// Join the #pircbot channel.
-		for (String channel : configs.channels) {
+		for (String channel : Configs.channels) {
 			Gui.log("Joining: " + channel + "\n");
 			bot.joinChannel(channel);
+		}
+		
+		//plugin load
+		Gui.log("Loading plugins");
+		for(IRCPlugin plugin : PluginPool){
+			if(!plugin.onLoad()){
+				Gui.log(plugin.getName()+" failed to load!");
+			}
 		}
 	}
 
