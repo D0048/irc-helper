@@ -47,6 +47,16 @@ public class MyBot extends PircBot {
 					message, message.split(" "));
 			this.funcRecord(channel, sender, login, hostname, message,
 					message.split(" "));
+
+			for (IRCPlugin plugin : Enterence.PluginPool) {
+				try {
+					plugin.onMessage(channel, sender, login, hostname, message);
+				} catch (Exception e) {
+					Gui.displayException(e);
+					Gui.log("Internal Error when handling " + plugin.getName());
+				}
+
+			}
 		}
 	}
 
@@ -80,6 +90,15 @@ public class MyBot extends PircBot {
 		} catch (Exception e) {
 			Gui.log(sender + " generated an invalid private call");
 		}
+		for (IRCPlugin plugin : Enterence.PluginPool) {
+			try {
+				plugin.onPrivateMessage(sender, login, hostname, message);
+			} catch (Exception e) {
+				Gui.displayException(e);
+				Gui.log("Internal Error when handling " + plugin.getName());
+			}
+
+		}
 	}
 
 	public void onSudoCall(String sender, String login, String hostname,
@@ -94,6 +113,15 @@ public class MyBot extends PircBot {
 			this.funcMute(sender, login, hostname, message, args, false);
 			return;
 		}
+		for (IRCPlugin plugin : Enterence.PluginPool) {
+			try {
+				plugin.onSudoCall(sender, login, hostname, message, args);
+			} catch (Exception e) {
+				Gui.displayException(e);
+				Gui.log("Internal Error when handling " + plugin.getName());
+			}
+
+		}
 	}
 
 	public void onPrivateCall(String sender, String login, String hostname,
@@ -106,6 +134,15 @@ public class MyBot extends PircBot {
 			this.priFuncAnonymousCall(sender, login, hostname, message, args,
 					false);
 		}
+		for (IRCPlugin plugin : Enterence.PluginPool) {
+			try {
+				plugin.onPrivateCall(sender, login, hostname, message, args);
+			} catch (Exception e) {
+				Gui.displayException(e);
+				Gui.log("Internal Error when handling " + plugin.getName());
+			}
+
+		}
 	}
 
 	public void onCall(String channel, String sender, String login,
@@ -114,7 +151,7 @@ public class MyBot extends PircBot {
 			this.funcHelp(channel, sender, login, hostname, message, args);
 			return;
 		}
-		
+
 		if (message.startsWith(Configs.preffix + "ping")) {
 			this.sendMessage(channel, "-pong");
 			return;
@@ -192,7 +229,14 @@ public class MyBot extends PircBot {
 			this.sendMessage(channel, sender + ": err: " + e.getMessage());
 			return;
 		}
-
+		for (IRCPlugin plugin : Enterence.PluginPool) {
+			try {
+				plugin.onCall(channel, sender, login, hostname, message, args);
+			} catch (Exception e) {
+				Gui.displayException(e);
+				Gui.log("Internal Error when handling " + plugin.getName());
+			}
+		}
 	}
 
 	public void funcRecord(String channel, String sender, String login,
@@ -388,5 +432,765 @@ public class MyBot extends PircBot {
 	protected void onQuit(String sourceNick, String sourceLogin,
 			String sourceHostname, String reason) {
 		super.onQuit(sourceNick, sourceLogin, sourceHostname, reason);
+		for (IRCPlugin plugin : Enterence.PluginPool) {
+			try {
+				plugin.onQuit(sourceNick, sourceLogin, sourceHostname, reason);
+			} catch (Exception e) {
+				Gui.displayException(e);
+				Gui.log("Internal Error when handling " + plugin.getName());
+			}
+		}
+	}
+
+	@Override
+	protected void onConnect() {
+		// TODO Auto-generated method stub
+		super.onConnect();
+		for (IRCPlugin plugin : Enterence.PluginPool) {
+			try {
+				plugin.onConnect();
+			} catch (Exception e) {
+				Gui.displayException(e);
+				Gui.log("Internal Error when handling " + plugin.getName());
+			}
+		}
+	}
+
+	@Override
+	protected void onDisconnect() {
+		// TODO Auto-generated method stub
+		super.onDisconnect();
+		for (IRCPlugin plugin : Enterence.PluginPool) {
+			try {
+				plugin.onDisconnect();
+			} catch (Exception e) {
+				Gui.displayException(e);
+				Gui.log("Internal Error when handling " + plugin.getName());
+			}
+		}
+	}
+
+	@Override
+	protected void onServerResponse(int code, String response) {
+		// TODO Auto-generated method stub
+		super.onServerResponse(code, response);
+		for (IRCPlugin plugin : Enterence.PluginPool) {
+			try {
+				plugin.onServerResponse(code, response);
+			} catch (Exception e) {
+				Gui.displayException(e);
+				Gui.log("Internal Error when handling " + plugin.getName());
+			}
+		}
+	}
+
+	@Override
+	protected void onUserList(String channel, User[] users) {
+		// TODO Auto-generated method stub
+		super.onUserList(channel, users);
+		for (IRCPlugin plugin : Enterence.PluginPool) {
+			try {
+				plugin.onUserList(channel, users);
+			} catch (Exception e) {
+				Gui.displayException(e);
+				Gui.log("Internal Error when handling " + plugin.getName());
+			}
+		}
+	}
+
+	@Override
+	protected void onAction(String sender, String login, String hostname,
+			String target, String action) {
+		// TODO Auto-generated method stub
+		super.onAction(sender, login, hostname, target, action);
+		for (IRCPlugin plugin : Enterence.PluginPool) {
+			try {
+				plugin.onAction(sender, login, hostname, target, action);
+			} catch (Exception e) {
+				Gui.displayException(e);
+				Gui.log("Internal Error when handling " + plugin.getName());
+			}
+		}
+	}
+
+	@Override
+	protected void onNotice(String sourceNick, String sourceLogin,
+			String sourceHostname, String target, String notice) {
+		// TODO Auto-generated method stub
+		super.onNotice(sourceNick, sourceLogin, sourceHostname, target, notice);
+		for (IRCPlugin plugin : Enterence.PluginPool) {
+			try {
+				plugin.onNotice(sourceNick, sourceLogin, sourceHostname,
+						target, notice);
+			} catch (Exception e) {
+				Gui.displayException(e);
+				Gui.log("Internal Error when handling " + plugin.getName());
+			}
+		}
+	}
+
+	@Override
+	protected void onJoin(String channel, String sender, String login,
+			String hostname) {
+		// TODO Auto-generated method stub
+		super.onJoin(channel, sender, login, hostname);
+		for (IRCPlugin plugin : Enterence.PluginPool) {
+			try {
+				plugin.onJoin(channel, sender, login, hostname);
+			} catch (Exception e) {
+				Gui.displayException(e);
+				Gui.log("Internal Error when handling " + plugin.getName());
+			}
+		}
+	}
+
+	@Override
+	protected void onPart(String channel, String sender, String login,
+			String hostname) {
+		// TODO Auto-generated method stub
+		super.onPart(channel, sender, login, hostname);
+		for (IRCPlugin plugin : Enterence.PluginPool) {
+			try {
+				plugin.onPart(channel, sender, login, hostname);
+			} catch (Exception e) {
+				Gui.displayException(e);
+				Gui.log("Internal Error when handling " + plugin.getName());
+			}
+		}
+	}
+
+	@Override
+	protected void onNickChange(String oldNick, String login, String hostname,
+			String newNick) {
+		// TODO Auto-generated method stub
+		super.onNickChange(oldNick, login, hostname, newNick);
+		for (IRCPlugin plugin : Enterence.PluginPool) {
+			try {
+				plugin.onNickChange(oldNick, login, hostname, newNick);
+			} catch (Exception e) {
+				Gui.displayException(e);
+				Gui.log("Internal Error when handling " + plugin.getName());
+			}
+		}
+	}
+
+	@Override
+	protected void onKick(String channel, String kickerNick,
+			String kickerLogin, String kickerHostname, String recipientNick,
+			String reason) {
+		// TODO Auto-generated method stub
+		super.onKick(channel, kickerNick, kickerLogin, kickerHostname,
+				recipientNick, reason);
+		for (IRCPlugin plugin : Enterence.PluginPool) {
+			try {
+				plugin.onKick(channel, kickerNick, kickerLogin, kickerHostname,
+						recipientNick, reason);
+			} catch (Exception e) {
+				Gui.displayException(e);
+				Gui.log("Internal Error when handling " + plugin.getName());
+			}
+		}
+	}
+
+	@Override
+	protected void onTopic(String channel, String topic) {
+		// TODO Auto-generated method stub
+		super.onTopic(channel, topic);
+		for (IRCPlugin plugin : Enterence.PluginPool) {
+			try {
+				plugin.onTopic(channel, topic);
+			} catch (Exception e) {
+				Gui.displayException(e);
+				Gui.log("Internal Error when handling " + plugin.getName());
+			}
+		}
+	}
+
+	@Override
+	protected void onTopic(String channel, String topic, String setBy,
+			long date, boolean changed) {
+		// TODO Auto-generated method stub
+		super.onTopic(channel, topic, setBy, date, changed);
+		for (IRCPlugin plugin : Enterence.PluginPool) {
+			try {
+				plugin.onTopic(channel, topic, setBy, date, changed);
+			} catch (Exception e) {
+				Gui.displayException(e);
+				Gui.log("Internal Error when handling " + plugin.getName());
+			}
+		}
+	}
+
+	@Override
+	protected void onChannelInfo(String channel, int userCount, String topic) {
+		// TODO Auto-generated method stub
+		super.onChannelInfo(channel, userCount, topic);
+		for (IRCPlugin plugin : Enterence.PluginPool) {
+			try {
+				plugin.onChannelInfo(channel, userCount, topic);
+			} catch (Exception e) {
+				Gui.displayException(e);
+				Gui.log("Internal Error when handling " + plugin.getName());
+			}
+		}
+	}
+
+	@Override
+	protected void onMode(String channel, String sourceNick,
+			String sourceLogin, String sourceHostname, String mode) {
+		// TODO Auto-generated method stub
+		super.onMode(channel, sourceNick, sourceLogin, sourceHostname, mode);
+		for (IRCPlugin plugin : Enterence.PluginPool) {
+			try {
+				plugin.onMode(channel, sourceNick, sourceLogin, sourceHostname,
+						mode);
+			} catch (Exception e) {
+				Gui.displayException(e);
+				Gui.log("Internal Error when handling " + plugin.getName());
+			}
+		}
+	}
+
+	@Override
+	protected void onUserMode(String targetNick, String sourceNick,
+			String sourceLogin, String sourceHostname, String mode) {
+		// TODO Auto-generated method stub
+		super.onUserMode(targetNick, sourceNick, sourceLogin, sourceHostname,
+				mode);
+		for (IRCPlugin plugin : Enterence.PluginPool) {
+			try {
+				plugin.onUserMode(targetNick, sourceNick, sourceLogin,
+						sourceHostname, mode);
+			} catch (Exception e) {
+				Gui.displayException(e);
+				Gui.log("Internal Error when handling " + plugin.getName());
+			}
+		}
+	}
+
+	@Override
+	protected void onOp(String channel, String sourceNick, String sourceLogin,
+			String sourceHostname, String recipient) {
+		// TODO Auto-generated method stub
+		super.onOp(channel, sourceNick, sourceLogin, sourceHostname, recipient);
+		for (IRCPlugin plugin : Enterence.PluginPool) {
+			try {
+				plugin.onOp(channel, sourceNick, sourceLogin, sourceHostname,
+						recipient);
+			} catch (Exception e) {
+				Gui.displayException(e);
+				Gui.log("Internal Error when handling " + plugin.getName());
+			}
+		}
+	}
+
+	@Override
+	protected void onDeop(String channel, String sourceNick,
+			String sourceLogin, String sourceHostname, String recipient) {
+		// TODO Auto-generated method stub
+		super.onDeop(channel, sourceNick, sourceLogin, sourceHostname,
+				recipient);
+		for (IRCPlugin plugin : Enterence.PluginPool) {
+			try {
+				plugin.onDeop(channel, sourceNick, sourceLogin, sourceHostname,
+						recipient);
+			} catch (Exception e) {
+				Gui.displayException(e);
+				Gui.log("Internal Error when handling " + plugin.getName());
+			}
+		}
+	}
+
+	@Override
+	protected void onVoice(String channel, String sourceNick,
+			String sourceLogin, String sourceHostname, String recipient) {
+		// TODO Auto-generated method stub
+		super.onVoice(channel, sourceNick, sourceLogin, sourceHostname,
+				recipient);
+		for (IRCPlugin plugin : Enterence.PluginPool) {
+			try {
+				plugin.onVoice(channel, sourceNick, sourceLogin, sourceHostname, recipient);
+			} catch (Exception e) {
+				Gui.displayException(e);
+				Gui.log("Internal Error when handling " + plugin.getName());
+			}
+		}
+	}
+
+	@Override
+	protected void onDeVoice(String channel, String sourceNick,
+			String sourceLogin, String sourceHostname, String recipient) {
+		// TODO Auto-generated method stub
+		super.onDeVoice(channel, sourceNick, sourceLogin, sourceHostname,
+				recipient);
+		for (IRCPlugin plugin : Enterence.PluginPool) {
+			try {
+				plugin.onDeVoice(channel, sourceNick, sourceLogin, sourceHostname, recipient);
+			} catch (Exception e) {
+				Gui.displayException(e);
+				Gui.log("Internal Error when handling " + plugin.getName());
+			}
+		}
+	}
+
+	@Override
+	protected void onSetChannelKey(String channel, String sourceNick,
+			String sourceLogin, String sourceHostname, String key) {
+		// TODO Auto-generated method stub
+		super.onSetChannelKey(channel, sourceNick, sourceLogin, sourceHostname,
+				key);
+		for (IRCPlugin plugin : Enterence.PluginPool) {
+			try {
+				plugin.onSetChannelKey(channel, sourceNick, sourceLogin, sourceHostname, key);
+			} catch (Exception e) {
+				Gui.displayException(e);
+				Gui.log("Internal Error when handling " + plugin.getName());
+			}
+		}
+	}
+
+	@Override
+	protected void onRemoveChannelKey(String channel, String sourceNick,
+			String sourceLogin, String sourceHostname, String key) {
+		// TODO Auto-generated method stub
+		super.onRemoveChannelKey(channel, sourceNick, sourceLogin,
+				sourceHostname, key);
+		for (IRCPlugin plugin : Enterence.PluginPool) {
+			try {
+				plugin.onRemoveChannelKey(channel, sourceNick, sourceLogin, sourceHostname, key);
+			} catch (Exception e) {
+				Gui.displayException(e);
+				Gui.log("Internal Error when handling " + plugin.getName());
+			}
+		}
+	}
+
+	@Override
+	protected void onSetChannelLimit(String channel, String sourceNick,
+			String sourceLogin, String sourceHostname, int limit) {
+		// TODO Auto-generated method stub
+		super.onSetChannelLimit(channel, sourceNick, sourceLogin,
+				sourceHostname, limit);
+		for (IRCPlugin plugin : Enterence.PluginPool) {
+			try {
+				plugin.onSetChannelLimit(channel, sourceNick, sourceLogin, sourceHostname, limit);
+			} catch (Exception e) {
+				Gui.displayException(e);
+				Gui.log("Internal Error when handling " + plugin.getName());
+			}
+		}
+	}
+
+	@Override
+	protected void onRemoveChannelLimit(String channel, String sourceNick,
+			String sourceLogin, String sourceHostname) {
+		// TODO Auto-generated method stub
+		super.onRemoveChannelLimit(channel, sourceNick, sourceLogin,
+				sourceHostname);
+		for (IRCPlugin plugin : Enterence.PluginPool) {
+			try {
+				plugin.onRemoveChannelLimit(channel, sourceNick, sourceLogin, sourceHostname);
+			} catch (Exception e) {
+				Gui.displayException(e);
+				Gui.log("Internal Error when handling " + plugin.getName());
+			}
+		}
+	}
+
+	@Override
+	protected void onSetChannelBan(String channel, String sourceNick,
+			String sourceLogin, String sourceHostname, String hostmask) {
+		// TODO Auto-generated method stub
+		super.onSetChannelBan(channel, sourceNick, sourceLogin, sourceHostname,
+				hostmask);
+		for (IRCPlugin plugin : Enterence.PluginPool) {
+			try {
+				plugin.onSetChannelBan(channel, sourceNick, sourceLogin, sourceHostname, hostmask);
+			} catch (Exception e) {
+				Gui.displayException(e);
+				Gui.log("Internal Error when handling " + plugin.getName());
+			}
+		}
+	}
+
+	@Override
+	protected void onRemoveChannelBan(String channel, String sourceNick,
+			String sourceLogin, String sourceHostname, String hostmask) {
+		// TODO Auto-generated method stub
+		super.onRemoveChannelBan(channel, sourceNick, sourceLogin,
+				sourceHostname, hostmask);
+		for (IRCPlugin plugin : Enterence.PluginPool) {
+			try {
+				plugin.onRemoveChannelBan(channel, sourceNick, sourceLogin, sourceHostname, hostmask);
+			} catch (Exception e) {
+				Gui.displayException(e);
+				Gui.log("Internal Error when handling " + plugin.getName());
+			}
+		}
+	}
+
+	@Override
+	protected void onSetTopicProtection(String channel, String sourceNick,
+			String sourceLogin, String sourceHostname) {
+		// TODO Auto-generated method stub
+		super.onSetTopicProtection(channel, sourceNick, sourceLogin,
+				sourceHostname);
+		for (IRCPlugin plugin : Enterence.PluginPool) {
+			try {
+				plugin.onSetTopicProtection(channel, sourceNick, sourceLogin, sourceHostname);
+			} catch (Exception e) {
+				Gui.displayException(e);
+				Gui.log("Internal Error when handling " + plugin.getName());
+			}
+		}
+	}
+
+	@Override
+	protected void onRemoveTopicProtection(String channel, String sourceNick,
+			String sourceLogin, String sourceHostname) {
+		// TODO Auto-generated method stub
+		super.onRemoveTopicProtection(channel, sourceNick, sourceLogin,
+				sourceHostname);
+		for (IRCPlugin plugin : Enterence.PluginPool) {
+			try {
+				plugin.onRemoveTopicProtection(channel, sourceNick, sourceLogin, sourceHostname);
+			} catch (Exception e) {
+				Gui.displayException(e);
+				Gui.log("Internal Error when handling " + plugin.getName());
+			}
+		}
+	}
+
+	@Override
+	protected void onSetNoExternalMessages(String channel, String sourceNick,
+			String sourceLogin, String sourceHostname) {
+		// TODO Auto-generated method stub
+		super.onSetNoExternalMessages(channel, sourceNick, sourceLogin,
+				sourceHostname);
+		for (IRCPlugin plugin : Enterence.PluginPool) {
+			try {
+				plugin.onSetNoExternalMessages(channel, sourceNick, sourceLogin, sourceHostname);
+			} catch (Exception e) {
+				Gui.displayException(e);
+				Gui.log("Internal Error when handling " + plugin.getName());
+			}
+		}
+	}
+
+	@Override
+	protected void onRemoveNoExternalMessages(String channel,
+			String sourceNick, String sourceLogin, String sourceHostname) {
+		// TODO Auto-generated method stub
+		super.onRemoveNoExternalMessages(channel, sourceNick, sourceLogin,
+				sourceHostname);
+		for (IRCPlugin plugin : Enterence.PluginPool) {
+			try {
+				plugin.onRemoveNoExternalMessages(channel, sourceNick, sourceLogin, sourceHostname);
+			} catch (Exception e) {
+				Gui.displayException(e);
+				Gui.log("Internal Error when handling " + plugin.getName());
+			}
+		}
+	}
+
+	@Override
+	protected void onSetInviteOnly(String channel, String sourceNick,
+			String sourceLogin, String sourceHostname) {
+		// TODO Auto-generated method stub
+		super.onSetInviteOnly(channel, sourceNick, sourceLogin, sourceHostname);
+		for (IRCPlugin plugin : Enterence.PluginPool) {
+			try {
+				plugin.onSetInviteOnly(channel, sourceNick, sourceLogin, sourceHostname);
+			} catch (Exception e) {
+				Gui.displayException(e);
+				Gui.log("Internal Error when handling " + plugin.getName());
+			}
+		}
+	}
+
+	@Override
+	protected void onRemoveInviteOnly(String channel, String sourceNick,
+			String sourceLogin, String sourceHostname) {
+		// TODO Auto-generated method stub
+		super.onRemoveInviteOnly(channel, sourceNick, sourceLogin,
+				sourceHostname);
+		for (IRCPlugin plugin : Enterence.PluginPool) {
+			try {
+				plugin.onRemoveInviteOnly(channel, sourceNick, sourceLogin, sourceHostname);
+			} catch (Exception e) {
+				Gui.displayException(e);
+				Gui.log("Internal Error when handling " + plugin.getName());
+			}
+		}
+	}
+
+	@Override
+	protected void onSetModerated(String channel, String sourceNick,
+			String sourceLogin, String sourceHostname) {
+		// TODO Auto-generated method stub
+		super.onSetModerated(channel, sourceNick, sourceLogin, sourceHostname);
+		for (IRCPlugin plugin : Enterence.PluginPool) {
+			try {
+				plugin.onSetModerated(channel, sourceNick, sourceLogin, sourceHostname);
+			} catch (Exception e) {
+				Gui.displayException(e);
+				Gui.log("Internal Error when handling " + plugin.getName());
+			}
+		}
+	}
+
+	@Override
+	protected void onRemoveModerated(String channel, String sourceNick,
+			String sourceLogin, String sourceHostname) {
+		// TODO Auto-generated method stub
+		super.onRemoveModerated(channel, sourceNick, sourceLogin,
+				sourceHostname);
+		for (IRCPlugin plugin : Enterence.PluginPool) {
+			try {
+				plugin.onRemoveModerated(channel, sourceNick, sourceLogin, sourceHostname);
+			} catch (Exception e) {
+				Gui.displayException(e);
+				Gui.log("Internal Error when handling " + plugin.getName());
+			}
+		}
+	}
+
+	@Override
+	protected void onSetPrivate(String channel, String sourceNick,
+			String sourceLogin, String sourceHostname) {
+		// TODO Auto-generated method stub
+		super.onSetPrivate(channel, sourceNick, sourceLogin, sourceHostname);
+		for (IRCPlugin plugin : Enterence.PluginPool) {
+			try {
+				plugin.onSetPrivate(channel, sourceNick, sourceLogin, sourceHostname);
+			} catch (Exception e) {
+				Gui.displayException(e);
+				Gui.log("Internal Error when handling " + plugin.getName());
+			}
+		}
+	}
+
+	@Override
+	protected void onRemovePrivate(String channel, String sourceNick,
+			String sourceLogin, String sourceHostname) {
+		// TODO Auto-generated method stub
+		super.onRemovePrivate(channel, sourceNick, sourceLogin, sourceHostname);
+		for (IRCPlugin plugin : Enterence.PluginPool) {
+			try {
+				plugin.onRemovePrivate(channel, sourceNick, sourceLogin, sourceHostname);
+			} catch (Exception e) {
+				Gui.displayException(e);
+				Gui.log("Internal Error when handling " + plugin.getName());
+			}
+		}
+	}
+
+	@Override
+	protected void onSetSecret(String channel, String sourceNick,
+			String sourceLogin, String sourceHostname) {
+		// TODO Auto-generated method stub
+		super.onSetSecret(channel, sourceNick, sourceLogin, sourceHostname);
+		for (IRCPlugin plugin : Enterence.PluginPool) {
+			try {
+				plugin.onSetSecret(channel, sourceNick, sourceLogin, sourceHostname);
+			} catch (Exception e) {
+				Gui.displayException(e);
+				Gui.log("Internal Error when handling " + plugin.getName());
+			}
+		}
+	}
+
+	@Override
+	protected void onRemoveSecret(String channel, String sourceNick,
+			String sourceLogin, String sourceHostname) {
+		// TODO Auto-generated method stub
+		super.onRemoveSecret(channel, sourceNick, sourceLogin, sourceHostname);
+		for (IRCPlugin plugin : Enterence.PluginPool) {
+			try {
+				plugin.onRemoveSecret(channel, sourceNick, sourceLogin, sourceHostname);
+			} catch (Exception e) {
+				Gui.displayException(e);
+				Gui.log("Internal Error when handling " + plugin.getName());
+			}
+		}
+	}
+
+	@Override
+	protected void onInvite(String targetNick, String sourceNick,
+			String sourceLogin, String sourceHostname, String channel) {
+		// TODO Auto-generated method stub
+		super.onInvite(targetNick, sourceNick, sourceLogin, sourceHostname,
+				channel);
+		for (IRCPlugin plugin : Enterence.PluginPool) {
+			try {
+				plugin.onInvite(targetNick, sourceNick, sourceLogin, sourceHostname, channel);
+			} catch (Exception e) {
+				Gui.displayException(e);
+				Gui.log("Internal Error when handling " + plugin.getName());
+			}
+		}
+	}
+
+	@Override
+	protected void onDccSendRequest(String sourceNick, String sourceLogin,
+			String sourceHostname, String filename, long address, int port,
+			int size) {
+		// TODO Auto-generated method stub
+		super.onDccSendRequest(sourceNick, sourceLogin, sourceHostname,
+				filename, address, port, size);
+		for (IRCPlugin plugin : Enterence.PluginPool) {
+			try {
+				plugin.onDccSendRequest(sourceNick, sourceLogin, sourceHostname, filename, address, port, size);
+			} catch (Exception e) {
+				Gui.displayException(e);
+				Gui.log("Internal Error when handling " + plugin.getName());
+			}
+		}
+	}
+
+	@Override
+	protected void onDccChatRequest(String sourceNick, String sourceLogin,
+			String sourceHostname, long address, int port) {
+		// TODO Auto-generated method stub
+		super.onDccChatRequest(sourceNick, sourceLogin, sourceHostname,
+				address, port);
+		for (IRCPlugin plugin : Enterence.PluginPool) {
+			try {
+				plugin.onDccChatRequest(sourceNick, sourceLogin, sourceHostname, address, port);
+			} catch (Exception e) {
+				Gui.displayException(e);
+				Gui.log("Internal Error when handling " + plugin.getName());
+			}
+		}
+	}
+
+	@Override
+	protected void onIncomingFileTransfer(DccFileTransfer transfer) {
+		// TODO Auto-generated method stub
+		super.onIncomingFileTransfer(transfer);
+		for (IRCPlugin plugin : Enterence.PluginPool) {
+			try {
+				plugin.onIncomingFileTransfer(transfer);
+			} catch (Exception e) {
+				Gui.displayException(e);
+				Gui.log("Internal Error when handling " + plugin.getName());
+			}
+		}
+	}
+
+	@Override
+	protected void onFileTransferFinished(DccFileTransfer transfer, Exception e) {
+		// TODO Auto-generated method stub
+		super.onFileTransferFinished(transfer, e);
+		for (IRCPlugin plugin : Enterence.PluginPool) {
+			try {
+				plugin.onFileTransferFinished(transfer, e);
+			} catch (Exception e2) {
+				Gui.displayException(e2);
+				Gui.log("Internal Error when handling " + plugin.getName());
+			}
+		}
+	}
+
+	@Override
+	protected void onIncomingChatRequest(DccChat chat) {
+		// TODO Auto-generated method stub
+		super.onIncomingChatRequest(chat);
+		for (IRCPlugin plugin : Enterence.PluginPool) {
+			try {
+				plugin.onIncomingChatRequest(chat);
+			} catch (Exception e) {
+				Gui.displayException(e);
+				Gui.log("Internal Error when handling " + plugin.getName());
+			}
+		}
+	}
+
+	@Override
+	protected void onVersion(String sourceNick, String sourceLogin,
+			String sourceHostname, String target) {
+		// TODO Auto-generated method stub
+		super.onVersion(sourceNick, sourceLogin, sourceHostname, target);
+		for (IRCPlugin plugin : Enterence.PluginPool) {
+			try {
+				plugin.onVersion(sourceNick, sourceLogin, sourceHostname, target);
+			} catch (Exception e) {
+				Gui.displayException(e);
+				Gui.log("Internal Error when handling " + plugin.getName());
+			}
+		}
+	}
+
+	@Override
+	protected void onPing(String sourceNick, String sourceLogin,
+			String sourceHostname, String target, String pingValue) {
+		// TODO Auto-generated method stub
+		super.onPing(sourceNick, sourceLogin, sourceHostname, target, pingValue);
+		for (IRCPlugin plugin : Enterence.PluginPool) {
+			try {
+				plugin.onPing(sourceNick, sourceLogin, sourceHostname, target, pingValue);
+			} catch (Exception e) {
+				Gui.displayException(e);
+				Gui.log("Internal Error when handling " + plugin.getName());
+			}
+		}
+	}
+
+	@Override
+	protected void onServerPing(String response) {
+		// TODO Auto-generated method stub
+		super.onServerPing(response);
+		for (IRCPlugin plugin : Enterence.PluginPool) {
+			try {
+				plugin.onServerPing(response);
+			} catch (Exception e) {
+				Gui.displayException(e);
+				Gui.log("Internal Error when handling " + plugin.getName());
+			}
+		}
+	}
+
+	@Override
+	protected void onTime(String sourceNick, String sourceLogin,
+			String sourceHostname, String target) {
+		// TODO Auto-generated method stub
+		super.onTime(sourceNick, sourceLogin, sourceHostname, target);
+		for (IRCPlugin plugin : Enterence.PluginPool) {
+			try {
+				plugin.onTime(sourceNick, sourceLogin, sourceHostname, target);
+			} catch (Exception e) {
+				Gui.displayException(e);
+				Gui.log("Internal Error when handling " + plugin.getName());
+			}
+		}
+	}
+
+	@Override
+	protected void onFinger(String sourceNick, String sourceLogin,
+			String sourceHostname, String target) {
+		// TODO Auto-generated method stub
+		super.onFinger(sourceNick, sourceLogin, sourceHostname, target);
+		for (IRCPlugin plugin : Enterence.PluginPool) {
+			try {
+				plugin.onFinger(sourceNick, sourceLogin, sourceHostname, target);
+			} catch (Exception e) {
+				Gui.displayException(e);
+				Gui.log("Internal Error when handling " + plugin.getName());
+			}
+		}
+	}
+
+	@Override
+	protected void onUnknown(String line) {
+		// TODO Auto-generated method stub
+		super.onUnknown(line);
+		for (IRCPlugin plugin : Enterence.PluginPool) {
+			try {
+				plugin.onUnknown(line);
+			} catch (Exception e) {
+				Gui.displayException(e);
+				Gui.log("Internal Error when handling " + plugin.getName());
+			}
+		}
 	}
 }

@@ -14,6 +14,8 @@ import bot.Records;
 
 public class Enterence {
 	// TODO:serilize record
+	// TODO:add robot
+	// TODO:pluginlize
 
 	public static String propFileName = "helper.properties";
 	public static MyConfig config = new MyConfig();
