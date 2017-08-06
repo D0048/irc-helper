@@ -1,7 +1,6 @@
 package ocrPlugin;
 
 import enterence.Enterence;
-import gui.Gui;
 import net.minecraft.util.org.apache.commons.io.IOUtils;
 
 import org.apache.http.HttpResponse;
@@ -11,9 +10,6 @@ import org.apache.http.entity.ContentType;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.entity.mime.content.StringBody;
 import org.apache.http.impl.client.HttpClientBuilder;
-import org.jibble.pircbot.DccChat;
-import org.jibble.pircbot.DccFileTransfer;
-import org.jibble.pircbot.User;
 import org.json.JSONObject;
 
 import bot.Configs;
@@ -24,8 +20,7 @@ public class OCRPlugin extends IRCPlugin {
 
 	@Override
 	public String getName() {
-
-		return super.getName();
+		return name;
 	}
 
 	@Override
@@ -43,6 +38,14 @@ public class OCRPlugin extends IRCPlugin {
 				Enterence.bot.sendMessage(channel, sender + ": " + reply);
 			}
 		}
+	}
+
+	@Override
+	public void onHelp(String channel, String sender, String login,
+			String hostname, String message, String[] args) {
+		super.onHelp(channel, sender, login, hostname, message, args);
+		Enterence.bot.sendMessage(sender, "---OCR Plugin---");
+		Enterence.bot.sendMessage(sender, "-ocr [pic_url] 					turn an image into English text");
 	}
 
 	@Override

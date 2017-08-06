@@ -45,6 +45,17 @@ public class Enterence {
 					Gui.displayException(e);
 				}
 				Gui.log("Record saved");
+
+				// plugin unload
+				Gui.log("Unloading plugins");
+				for (IRCPlugin plugin : PluginPool) {
+					try {
+						plugin.onUnload();
+					} catch (Exception e) {
+						Gui.log(plugin.getName() + " failed to unload: "
+								+ e.getMessage());
+					}
+				}
 			}
 		}));
 
@@ -80,16 +91,15 @@ public class Enterence {
 			Gui.log("Joining: " + channel + "\n");
 			bot.joinChannel(channel);
 		}
-		
+
 		PluginPool.add(new OCRPlugin());
 		PluginPool.add(new TLPlugin());
-		//plugin load
+		// plugin load
 		Gui.log("Loading plugins");
-		for(IRCPlugin plugin : PluginPool){
-			if(!plugin.onLoad()){
-				Gui.log(plugin.getName()+" failed to load!");
+		for (IRCPlugin plugin : PluginPool) {
+			if (!plugin.onLoad()) {
+				Gui.log(plugin.getName() + " failed to load!");
 			}
 		}
 	}
-
 }

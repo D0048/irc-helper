@@ -113,6 +113,24 @@ public class MyBot extends PircBot {
 			this.funcMute(sender, login, hostname, message, args, false);
 			return;
 		}
+		if (message.startsWith(Configs.preffix + " " + Configs.sudoPwd + " "
+				+ "reload")) {
+			for (IRCPlugin plugin : Enterence.PluginPool) {
+				if (message.split(" ")[3] != null
+						| message.split(" ")[3] == plugin.getName()) {
+					try {
+						plugin.onUnload();
+						plugin.onLoad();
+					} catch (Exception e) {
+						Gui.displayException(e);
+						this.sendMessage(sender,
+								"Failed to reload " + plugin.getName() + ": "
+										+ e.getMessage());
+					}
+					Gui.log(plugin.getName() + " reloaded");
+				}
+			}
+		}
 		for (IRCPlugin plugin : Enterence.PluginPool) {
 			try {
 				plugin.onSudoCall(sender, login, hostname, message, args);
@@ -245,8 +263,8 @@ public class MyBot extends PircBot {
 			Records.records.get(sender).add(
 					"[" + new java.util.Date().toString() + "@" + channel + "]"
 							+ sender + ":" + message);
-			Gui.log("pushed:" + "[" + new java.util.Date().toString() + "@"
-					+ channel + "]" + sender + ":" + message);
+			// Gui.log("pushed:" + "[" + new java.util.Date().toString() + "@"
+			// + channel + "]" + sender + ":" + message);
 		} else {
 			Records.records.put(sender, new HashSet<String>());
 		}
@@ -430,7 +448,6 @@ public class MyBot extends PircBot {
 		}
 		this.sendMessage(sender, "Sudo commands:\n");
 		this.sendMessage(sender, "[hidden]");
-		
 	}
 
 	public boolean isCred(String name) {
@@ -453,7 +470,7 @@ public class MyBot extends PircBot {
 
 	@Override
 	protected void onConnect() {
-		// TODO Auto-generated method stub
+
 		super.onConnect();
 		for (IRCPlugin plugin : Enterence.PluginPool) {
 			try {
@@ -467,7 +484,7 @@ public class MyBot extends PircBot {
 
 	@Override
 	protected void onDisconnect() {
-		// TODO Auto-generated method stub
+
 		super.onDisconnect();
 		for (IRCPlugin plugin : Enterence.PluginPool) {
 			try {
@@ -481,7 +498,7 @@ public class MyBot extends PircBot {
 
 	@Override
 	protected void onServerResponse(int code, String response) {
-		// TODO Auto-generated method stub
+
 		super.onServerResponse(code, response);
 		for (IRCPlugin plugin : Enterence.PluginPool) {
 			try {
@@ -495,7 +512,7 @@ public class MyBot extends PircBot {
 
 	@Override
 	protected void onUserList(String channel, User[] users) {
-		// TODO Auto-generated method stub
+
 		super.onUserList(channel, users);
 		for (IRCPlugin plugin : Enterence.PluginPool) {
 			try {
@@ -510,7 +527,7 @@ public class MyBot extends PircBot {
 	@Override
 	protected void onAction(String sender, String login, String hostname,
 			String target, String action) {
-		// TODO Auto-generated method stub
+
 		super.onAction(sender, login, hostname, target, action);
 		for (IRCPlugin plugin : Enterence.PluginPool) {
 			try {
@@ -525,7 +542,7 @@ public class MyBot extends PircBot {
 	@Override
 	protected void onNotice(String sourceNick, String sourceLogin,
 			String sourceHostname, String target, String notice) {
-		// TODO Auto-generated method stub
+
 		super.onNotice(sourceNick, sourceLogin, sourceHostname, target, notice);
 		for (IRCPlugin plugin : Enterence.PluginPool) {
 			try {
@@ -541,7 +558,7 @@ public class MyBot extends PircBot {
 	@Override
 	protected void onJoin(String channel, String sender, String login,
 			String hostname) {
-		// TODO Auto-generated method stub
+
 		super.onJoin(channel, sender, login, hostname);
 		for (IRCPlugin plugin : Enterence.PluginPool) {
 			try {
@@ -556,7 +573,7 @@ public class MyBot extends PircBot {
 	@Override
 	protected void onPart(String channel, String sender, String login,
 			String hostname) {
-		// TODO Auto-generated method stub
+
 		super.onPart(channel, sender, login, hostname);
 		for (IRCPlugin plugin : Enterence.PluginPool) {
 			try {
@@ -571,7 +588,7 @@ public class MyBot extends PircBot {
 	@Override
 	protected void onNickChange(String oldNick, String login, String hostname,
 			String newNick) {
-		// TODO Auto-generated method stub
+
 		super.onNickChange(oldNick, login, hostname, newNick);
 		for (IRCPlugin plugin : Enterence.PluginPool) {
 			try {
@@ -587,7 +604,7 @@ public class MyBot extends PircBot {
 	protected void onKick(String channel, String kickerNick,
 			String kickerLogin, String kickerHostname, String recipientNick,
 			String reason) {
-		// TODO Auto-generated method stub
+
 		super.onKick(channel, kickerNick, kickerLogin, kickerHostname,
 				recipientNick, reason);
 		for (IRCPlugin plugin : Enterence.PluginPool) {
@@ -603,7 +620,7 @@ public class MyBot extends PircBot {
 
 	@Override
 	protected void onTopic(String channel, String topic) {
-		// TODO Auto-generated method stub
+
 		super.onTopic(channel, topic);
 		for (IRCPlugin plugin : Enterence.PluginPool) {
 			try {
@@ -618,7 +635,7 @@ public class MyBot extends PircBot {
 	@Override
 	protected void onTopic(String channel, String topic, String setBy,
 			long date, boolean changed) {
-		// TODO Auto-generated method stub
+
 		super.onTopic(channel, topic, setBy, date, changed);
 		for (IRCPlugin plugin : Enterence.PluginPool) {
 			try {
@@ -632,7 +649,7 @@ public class MyBot extends PircBot {
 
 	@Override
 	protected void onChannelInfo(String channel, int userCount, String topic) {
-		// TODO Auto-generated method stub
+
 		super.onChannelInfo(channel, userCount, topic);
 		for (IRCPlugin plugin : Enterence.PluginPool) {
 			try {
@@ -647,7 +664,7 @@ public class MyBot extends PircBot {
 	@Override
 	protected void onMode(String channel, String sourceNick,
 			String sourceLogin, String sourceHostname, String mode) {
-		// TODO Auto-generated method stub
+
 		super.onMode(channel, sourceNick, sourceLogin, sourceHostname, mode);
 		for (IRCPlugin plugin : Enterence.PluginPool) {
 			try {
@@ -663,7 +680,7 @@ public class MyBot extends PircBot {
 	@Override
 	protected void onUserMode(String targetNick, String sourceNick,
 			String sourceLogin, String sourceHostname, String mode) {
-		// TODO Auto-generated method stub
+
 		super.onUserMode(targetNick, sourceNick, sourceLogin, sourceHostname,
 				mode);
 		for (IRCPlugin plugin : Enterence.PluginPool) {
@@ -680,7 +697,7 @@ public class MyBot extends PircBot {
 	@Override
 	protected void onOp(String channel, String sourceNick, String sourceLogin,
 			String sourceHostname, String recipient) {
-		// TODO Auto-generated method stub
+
 		super.onOp(channel, sourceNick, sourceLogin, sourceHostname, recipient);
 		for (IRCPlugin plugin : Enterence.PluginPool) {
 			try {
@@ -696,7 +713,7 @@ public class MyBot extends PircBot {
 	@Override
 	protected void onDeop(String channel, String sourceNick,
 			String sourceLogin, String sourceHostname, String recipient) {
-		// TODO Auto-generated method stub
+
 		super.onDeop(channel, sourceNick, sourceLogin, sourceHostname,
 				recipient);
 		for (IRCPlugin plugin : Enterence.PluginPool) {
@@ -713,7 +730,7 @@ public class MyBot extends PircBot {
 	@Override
 	protected void onVoice(String channel, String sourceNick,
 			String sourceLogin, String sourceHostname, String recipient) {
-		// TODO Auto-generated method stub
+
 		super.onVoice(channel, sourceNick, sourceLogin, sourceHostname,
 				recipient);
 		for (IRCPlugin plugin : Enterence.PluginPool) {
@@ -730,7 +747,7 @@ public class MyBot extends PircBot {
 	@Override
 	protected void onDeVoice(String channel, String sourceNick,
 			String sourceLogin, String sourceHostname, String recipient) {
-		// TODO Auto-generated method stub
+
 		super.onDeVoice(channel, sourceNick, sourceLogin, sourceHostname,
 				recipient);
 		for (IRCPlugin plugin : Enterence.PluginPool) {
@@ -747,7 +764,7 @@ public class MyBot extends PircBot {
 	@Override
 	protected void onSetChannelKey(String channel, String sourceNick,
 			String sourceLogin, String sourceHostname, String key) {
-		// TODO Auto-generated method stub
+
 		super.onSetChannelKey(channel, sourceNick, sourceLogin, sourceHostname,
 				key);
 		for (IRCPlugin plugin : Enterence.PluginPool) {
@@ -764,7 +781,7 @@ public class MyBot extends PircBot {
 	@Override
 	protected void onRemoveChannelKey(String channel, String sourceNick,
 			String sourceLogin, String sourceHostname, String key) {
-		// TODO Auto-generated method stub
+
 		super.onRemoveChannelKey(channel, sourceNick, sourceLogin,
 				sourceHostname, key);
 		for (IRCPlugin plugin : Enterence.PluginPool) {
@@ -781,7 +798,7 @@ public class MyBot extends PircBot {
 	@Override
 	protected void onSetChannelLimit(String channel, String sourceNick,
 			String sourceLogin, String sourceHostname, int limit) {
-		// TODO Auto-generated method stub
+
 		super.onSetChannelLimit(channel, sourceNick, sourceLogin,
 				sourceHostname, limit);
 		for (IRCPlugin plugin : Enterence.PluginPool) {
@@ -798,7 +815,7 @@ public class MyBot extends PircBot {
 	@Override
 	protected void onRemoveChannelLimit(String channel, String sourceNick,
 			String sourceLogin, String sourceHostname) {
-		// TODO Auto-generated method stub
+
 		super.onRemoveChannelLimit(channel, sourceNick, sourceLogin,
 				sourceHostname);
 		for (IRCPlugin plugin : Enterence.PluginPool) {
@@ -815,7 +832,7 @@ public class MyBot extends PircBot {
 	@Override
 	protected void onSetChannelBan(String channel, String sourceNick,
 			String sourceLogin, String sourceHostname, String hostmask) {
-		// TODO Auto-generated method stub
+
 		super.onSetChannelBan(channel, sourceNick, sourceLogin, sourceHostname,
 				hostmask);
 		for (IRCPlugin plugin : Enterence.PluginPool) {
@@ -832,7 +849,7 @@ public class MyBot extends PircBot {
 	@Override
 	protected void onRemoveChannelBan(String channel, String sourceNick,
 			String sourceLogin, String sourceHostname, String hostmask) {
-		// TODO Auto-generated method stub
+
 		super.onRemoveChannelBan(channel, sourceNick, sourceLogin,
 				sourceHostname, hostmask);
 		for (IRCPlugin plugin : Enterence.PluginPool) {
@@ -849,7 +866,7 @@ public class MyBot extends PircBot {
 	@Override
 	protected void onSetTopicProtection(String channel, String sourceNick,
 			String sourceLogin, String sourceHostname) {
-		// TODO Auto-generated method stub
+
 		super.onSetTopicProtection(channel, sourceNick, sourceLogin,
 				sourceHostname);
 		for (IRCPlugin plugin : Enterence.PluginPool) {
@@ -866,7 +883,7 @@ public class MyBot extends PircBot {
 	@Override
 	protected void onRemoveTopicProtection(String channel, String sourceNick,
 			String sourceLogin, String sourceHostname) {
-		// TODO Auto-generated method stub
+
 		super.onRemoveTopicProtection(channel, sourceNick, sourceLogin,
 				sourceHostname);
 		for (IRCPlugin plugin : Enterence.PluginPool) {
@@ -883,7 +900,7 @@ public class MyBot extends PircBot {
 	@Override
 	protected void onSetNoExternalMessages(String channel, String sourceNick,
 			String sourceLogin, String sourceHostname) {
-		// TODO Auto-generated method stub
+
 		super.onSetNoExternalMessages(channel, sourceNick, sourceLogin,
 				sourceHostname);
 		for (IRCPlugin plugin : Enterence.PluginPool) {
@@ -900,7 +917,7 @@ public class MyBot extends PircBot {
 	@Override
 	protected void onRemoveNoExternalMessages(String channel,
 			String sourceNick, String sourceLogin, String sourceHostname) {
-		// TODO Auto-generated method stub
+
 		super.onRemoveNoExternalMessages(channel, sourceNick, sourceLogin,
 				sourceHostname);
 		for (IRCPlugin plugin : Enterence.PluginPool) {
@@ -917,7 +934,7 @@ public class MyBot extends PircBot {
 	@Override
 	protected void onSetInviteOnly(String channel, String sourceNick,
 			String sourceLogin, String sourceHostname) {
-		// TODO Auto-generated method stub
+
 		super.onSetInviteOnly(channel, sourceNick, sourceLogin, sourceHostname);
 		for (IRCPlugin plugin : Enterence.PluginPool) {
 			try {
@@ -933,7 +950,7 @@ public class MyBot extends PircBot {
 	@Override
 	protected void onRemoveInviteOnly(String channel, String sourceNick,
 			String sourceLogin, String sourceHostname) {
-		// TODO Auto-generated method stub
+
 		super.onRemoveInviteOnly(channel, sourceNick, sourceLogin,
 				sourceHostname);
 		for (IRCPlugin plugin : Enterence.PluginPool) {
@@ -950,7 +967,7 @@ public class MyBot extends PircBot {
 	@Override
 	protected void onSetModerated(String channel, String sourceNick,
 			String sourceLogin, String sourceHostname) {
-		// TODO Auto-generated method stub
+
 		super.onSetModerated(channel, sourceNick, sourceLogin, sourceHostname);
 		for (IRCPlugin plugin : Enterence.PluginPool) {
 			try {
@@ -966,7 +983,7 @@ public class MyBot extends PircBot {
 	@Override
 	protected void onRemoveModerated(String channel, String sourceNick,
 			String sourceLogin, String sourceHostname) {
-		// TODO Auto-generated method stub
+
 		super.onRemoveModerated(channel, sourceNick, sourceLogin,
 				sourceHostname);
 		for (IRCPlugin plugin : Enterence.PluginPool) {
@@ -983,7 +1000,7 @@ public class MyBot extends PircBot {
 	@Override
 	protected void onSetPrivate(String channel, String sourceNick,
 			String sourceLogin, String sourceHostname) {
-		// TODO Auto-generated method stub
+
 		super.onSetPrivate(channel, sourceNick, sourceLogin, sourceHostname);
 		for (IRCPlugin plugin : Enterence.PluginPool) {
 			try {
@@ -999,7 +1016,7 @@ public class MyBot extends PircBot {
 	@Override
 	protected void onRemovePrivate(String channel, String sourceNick,
 			String sourceLogin, String sourceHostname) {
-		// TODO Auto-generated method stub
+
 		super.onRemovePrivate(channel, sourceNick, sourceLogin, sourceHostname);
 		for (IRCPlugin plugin : Enterence.PluginPool) {
 			try {
@@ -1015,7 +1032,7 @@ public class MyBot extends PircBot {
 	@Override
 	protected void onSetSecret(String channel, String sourceNick,
 			String sourceLogin, String sourceHostname) {
-		// TODO Auto-generated method stub
+
 		super.onSetSecret(channel, sourceNick, sourceLogin, sourceHostname);
 		for (IRCPlugin plugin : Enterence.PluginPool) {
 			try {
@@ -1031,7 +1048,7 @@ public class MyBot extends PircBot {
 	@Override
 	protected void onRemoveSecret(String channel, String sourceNick,
 			String sourceLogin, String sourceHostname) {
-		// TODO Auto-generated method stub
+
 		super.onRemoveSecret(channel, sourceNick, sourceLogin, sourceHostname);
 		for (IRCPlugin plugin : Enterence.PluginPool) {
 			try {
@@ -1047,7 +1064,7 @@ public class MyBot extends PircBot {
 	@Override
 	protected void onInvite(String targetNick, String sourceNick,
 			String sourceLogin, String sourceHostname, String channel) {
-		// TODO Auto-generated method stub
+
 		super.onInvite(targetNick, sourceNick, sourceLogin, sourceHostname,
 				channel);
 		for (IRCPlugin plugin : Enterence.PluginPool) {
@@ -1065,7 +1082,7 @@ public class MyBot extends PircBot {
 	protected void onDccSendRequest(String sourceNick, String sourceLogin,
 			String sourceHostname, String filename, long address, int port,
 			int size) {
-		// TODO Auto-generated method stub
+
 		super.onDccSendRequest(sourceNick, sourceLogin, sourceHostname,
 				filename, address, port, size);
 		for (IRCPlugin plugin : Enterence.PluginPool) {
@@ -1082,7 +1099,7 @@ public class MyBot extends PircBot {
 	@Override
 	protected void onDccChatRequest(String sourceNick, String sourceLogin,
 			String sourceHostname, long address, int port) {
-		// TODO Auto-generated method stub
+
 		super.onDccChatRequest(sourceNick, sourceLogin, sourceHostname,
 				address, port);
 		for (IRCPlugin plugin : Enterence.PluginPool) {
@@ -1098,7 +1115,7 @@ public class MyBot extends PircBot {
 
 	@Override
 	protected void onIncomingFileTransfer(DccFileTransfer transfer) {
-		// TODO Auto-generated method stub
+
 		super.onIncomingFileTransfer(transfer);
 		for (IRCPlugin plugin : Enterence.PluginPool) {
 			try {
@@ -1112,7 +1129,7 @@ public class MyBot extends PircBot {
 
 	@Override
 	protected void onFileTransferFinished(DccFileTransfer transfer, Exception e) {
-		// TODO Auto-generated method stub
+
 		super.onFileTransferFinished(transfer, e);
 		for (IRCPlugin plugin : Enterence.PluginPool) {
 			try {
@@ -1126,7 +1143,7 @@ public class MyBot extends PircBot {
 
 	@Override
 	protected void onIncomingChatRequest(DccChat chat) {
-		// TODO Auto-generated method stub
+
 		super.onIncomingChatRequest(chat);
 		for (IRCPlugin plugin : Enterence.PluginPool) {
 			try {
@@ -1141,7 +1158,7 @@ public class MyBot extends PircBot {
 	@Override
 	protected void onVersion(String sourceNick, String sourceLogin,
 			String sourceHostname, String target) {
-		// TODO Auto-generated method stub
+
 		super.onVersion(sourceNick, sourceLogin, sourceHostname, target);
 		for (IRCPlugin plugin : Enterence.PluginPool) {
 			try {
@@ -1157,7 +1174,7 @@ public class MyBot extends PircBot {
 	@Override
 	protected void onPing(String sourceNick, String sourceLogin,
 			String sourceHostname, String target, String pingValue) {
-		// TODO Auto-generated method stub
+
 		super.onPing(sourceNick, sourceLogin, sourceHostname, target, pingValue);
 		for (IRCPlugin plugin : Enterence.PluginPool) {
 			try {
@@ -1172,7 +1189,7 @@ public class MyBot extends PircBot {
 
 	@Override
 	protected void onServerPing(String response) {
-		// TODO Auto-generated method stub
+
 		super.onServerPing(response);
 		for (IRCPlugin plugin : Enterence.PluginPool) {
 			try {
@@ -1187,7 +1204,7 @@ public class MyBot extends PircBot {
 	@Override
 	protected void onTime(String sourceNick, String sourceLogin,
 			String sourceHostname, String target) {
-		// TODO Auto-generated method stub
+
 		super.onTime(sourceNick, sourceLogin, sourceHostname, target);
 		for (IRCPlugin plugin : Enterence.PluginPool) {
 			try {
@@ -1202,7 +1219,7 @@ public class MyBot extends PircBot {
 	@Override
 	protected void onFinger(String sourceNick, String sourceLogin,
 			String sourceHostname, String target) {
-		// TODO Auto-generated method stub
+
 		super.onFinger(sourceNick, sourceLogin, sourceHostname, target);
 		for (IRCPlugin plugin : Enterence.PluginPool) {
 			try {
@@ -1216,7 +1233,7 @@ public class MyBot extends PircBot {
 
 	@Override
 	protected void onUnknown(String line) {
-		// TODO Auto-generated method stub
+
 		super.onUnknown(line);
 		for (IRCPlugin plugin : Enterence.PluginPool) {
 			try {

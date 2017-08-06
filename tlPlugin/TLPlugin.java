@@ -1,24 +1,6 @@
 package tlPlugin;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.net.URL;
-import java.net.URLConnection;
-
-import net.minecraft.util.org.apache.commons.io.IOUtils;
-
-import org.apache.http.Consts;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.params.CoreProtocolPNames;
 import org.bukkit.craftbukkit.libs.com.google.gson.Gson;
-import org.json.JSONObject;
-
 import tlPlugin.turing.util.PostServer;
 
 import enterence.Enterence;
@@ -29,7 +11,7 @@ import bot.IRCPlugin;
 
 public class TLPlugin extends IRCPlugin {
 
-	protected String name = "TLPlugin";
+	String name = "TLPlugin";
 
 	@Override
 	public void onCall(String channel, String sender, String login,
@@ -63,14 +45,15 @@ public class TLPlugin extends IRCPlugin {
 			String hostname, String message, String args[], String statement)
 			throws Exception {
 
-		StringEntity postingString = new StringEntity(new String(new Gson()
-				.toJson(new Request(statement, sender)).getBytes(), "UTF-8"));
-		
-		Gui.log(new String(new Gson()
-				.toJson(new Request(statement, sender)).getBytes(), "UTF-8"));
+		// StringEntity postingString = new StringEntity(new String(new Gson()
+		// .toJson(new Request(statement, sender)).getBytes(), "UTF-8"));
 
-		return PostServer.SendPost(new String(new Gson()
-		.toJson(new Request(statement, sender)).getBytes(), "UTF-8"),
+		Gui.log(new String(new Gson().toJson(new Request(statement, sender))
+				.getBytes(), "UTF-8"));
+
+		return PostServer.SendPost(
+				new String(new Gson().toJson(new Request(statement, sender))
+						.getBytes(), "UTF-8"),
 				"http://www.tuling123.com/openapi/api").split("\"")[5];
 		/*
 		 * HttpClient httpClient = HttpClientBuilder.create().build(); HttpPost
@@ -136,8 +119,9 @@ public class TLPlugin extends IRCPlugin {
 	@Override
 	public void onHelp(String channel, String sender, String login,
 			String hostname, String message, String[] args) {
-		// TODO Auto-generated method stub
 		super.onHelp(channel, sender, login, hostname, message, args);
+		Enterence.bot.sendMessage(sender, "---TL Plugin---");
+		Enterence.bot.sendMessage(sender, "-chat [anything] 					Chat with the AI using the id of current user");
 	}
 
 	@Override
@@ -147,7 +131,7 @@ public class TLPlugin extends IRCPlugin {
 
 	@Override
 	public String getName() {
-		return super.getName();
+		return name;
 	}
 }
 

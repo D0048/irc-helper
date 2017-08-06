@@ -4,7 +4,6 @@ import org.jibble.pircbot.DccChat;
 import org.jibble.pircbot.DccFileTransfer;
 import org.jibble.pircbot.User;
 
-import enterence.Enterence;
 import gui.Gui;
 
 public class IRCPlugin {
@@ -15,7 +14,7 @@ public class IRCPlugin {
 	}
 
 	public void onUnload() {
-		Gui.log("Unloading"+this.name);
+		Gui.log("Unloading "+this.getName());
 	}
 
 	public void onHelp(String channel, String sender, String login,
@@ -39,7 +38,7 @@ public class IRCPlugin {
 	}
 
 	public boolean onLoad() {
-		Gui.log("Loading"+this.name);
+		Gui.log("Loading "+this.getName());
 		return true;
 	}
 
