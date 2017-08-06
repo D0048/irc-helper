@@ -420,8 +420,17 @@ public class MyBot extends PircBot {
 				"/msg "
 						+ Configs.name
 						+ " -am [channel] [msg] 			Deliver an anonymous msg to that channel\n");
+		for (IRCPlugin plugin : Enterence.PluginPool) {
+			try {
+				plugin.onHelp(channel, sender, login, hostname, message, args);
+			} catch (Exception e) {
+				Gui.displayException(e);
+				Gui.log("Internal Error when handling " + plugin.getName());
+			}
+		}
 		this.sendMessage(sender, "Sudo commands:\n");
 		this.sendMessage(sender, "[hidden]");
+		
 	}
 
 	public boolean isCred(String name) {
@@ -709,7 +718,8 @@ public class MyBot extends PircBot {
 				recipient);
 		for (IRCPlugin plugin : Enterence.PluginPool) {
 			try {
-				plugin.onVoice(channel, sourceNick, sourceLogin, sourceHostname, recipient);
+				plugin.onVoice(channel, sourceNick, sourceLogin,
+						sourceHostname, recipient);
 			} catch (Exception e) {
 				Gui.displayException(e);
 				Gui.log("Internal Error when handling " + plugin.getName());
@@ -725,7 +735,8 @@ public class MyBot extends PircBot {
 				recipient);
 		for (IRCPlugin plugin : Enterence.PluginPool) {
 			try {
-				plugin.onDeVoice(channel, sourceNick, sourceLogin, sourceHostname, recipient);
+				plugin.onDeVoice(channel, sourceNick, sourceLogin,
+						sourceHostname, recipient);
 			} catch (Exception e) {
 				Gui.displayException(e);
 				Gui.log("Internal Error when handling " + plugin.getName());
@@ -741,7 +752,8 @@ public class MyBot extends PircBot {
 				key);
 		for (IRCPlugin plugin : Enterence.PluginPool) {
 			try {
-				plugin.onSetChannelKey(channel, sourceNick, sourceLogin, sourceHostname, key);
+				plugin.onSetChannelKey(channel, sourceNick, sourceLogin,
+						sourceHostname, key);
 			} catch (Exception e) {
 				Gui.displayException(e);
 				Gui.log("Internal Error when handling " + plugin.getName());
@@ -757,7 +769,8 @@ public class MyBot extends PircBot {
 				sourceHostname, key);
 		for (IRCPlugin plugin : Enterence.PluginPool) {
 			try {
-				plugin.onRemoveChannelKey(channel, sourceNick, sourceLogin, sourceHostname, key);
+				plugin.onRemoveChannelKey(channel, sourceNick, sourceLogin,
+						sourceHostname, key);
 			} catch (Exception e) {
 				Gui.displayException(e);
 				Gui.log("Internal Error when handling " + plugin.getName());
@@ -773,7 +786,8 @@ public class MyBot extends PircBot {
 				sourceHostname, limit);
 		for (IRCPlugin plugin : Enterence.PluginPool) {
 			try {
-				plugin.onSetChannelLimit(channel, sourceNick, sourceLogin, sourceHostname, limit);
+				plugin.onSetChannelLimit(channel, sourceNick, sourceLogin,
+						sourceHostname, limit);
 			} catch (Exception e) {
 				Gui.displayException(e);
 				Gui.log("Internal Error when handling " + plugin.getName());
@@ -789,7 +803,8 @@ public class MyBot extends PircBot {
 				sourceHostname);
 		for (IRCPlugin plugin : Enterence.PluginPool) {
 			try {
-				plugin.onRemoveChannelLimit(channel, sourceNick, sourceLogin, sourceHostname);
+				plugin.onRemoveChannelLimit(channel, sourceNick, sourceLogin,
+						sourceHostname);
 			} catch (Exception e) {
 				Gui.displayException(e);
 				Gui.log("Internal Error when handling " + plugin.getName());
@@ -805,7 +820,8 @@ public class MyBot extends PircBot {
 				hostmask);
 		for (IRCPlugin plugin : Enterence.PluginPool) {
 			try {
-				plugin.onSetChannelBan(channel, sourceNick, sourceLogin, sourceHostname, hostmask);
+				plugin.onSetChannelBan(channel, sourceNick, sourceLogin,
+						sourceHostname, hostmask);
 			} catch (Exception e) {
 				Gui.displayException(e);
 				Gui.log("Internal Error when handling " + plugin.getName());
@@ -821,7 +837,8 @@ public class MyBot extends PircBot {
 				sourceHostname, hostmask);
 		for (IRCPlugin plugin : Enterence.PluginPool) {
 			try {
-				plugin.onRemoveChannelBan(channel, sourceNick, sourceLogin, sourceHostname, hostmask);
+				plugin.onRemoveChannelBan(channel, sourceNick, sourceLogin,
+						sourceHostname, hostmask);
 			} catch (Exception e) {
 				Gui.displayException(e);
 				Gui.log("Internal Error when handling " + plugin.getName());
@@ -837,7 +854,8 @@ public class MyBot extends PircBot {
 				sourceHostname);
 		for (IRCPlugin plugin : Enterence.PluginPool) {
 			try {
-				plugin.onSetTopicProtection(channel, sourceNick, sourceLogin, sourceHostname);
+				plugin.onSetTopicProtection(channel, sourceNick, sourceLogin,
+						sourceHostname);
 			} catch (Exception e) {
 				Gui.displayException(e);
 				Gui.log("Internal Error when handling " + plugin.getName());
@@ -853,7 +871,8 @@ public class MyBot extends PircBot {
 				sourceHostname);
 		for (IRCPlugin plugin : Enterence.PluginPool) {
 			try {
-				plugin.onRemoveTopicProtection(channel, sourceNick, sourceLogin, sourceHostname);
+				plugin.onRemoveTopicProtection(channel, sourceNick,
+						sourceLogin, sourceHostname);
 			} catch (Exception e) {
 				Gui.displayException(e);
 				Gui.log("Internal Error when handling " + plugin.getName());
@@ -869,7 +888,8 @@ public class MyBot extends PircBot {
 				sourceHostname);
 		for (IRCPlugin plugin : Enterence.PluginPool) {
 			try {
-				plugin.onSetNoExternalMessages(channel, sourceNick, sourceLogin, sourceHostname);
+				plugin.onSetNoExternalMessages(channel, sourceNick,
+						sourceLogin, sourceHostname);
 			} catch (Exception e) {
 				Gui.displayException(e);
 				Gui.log("Internal Error when handling " + plugin.getName());
@@ -885,7 +905,8 @@ public class MyBot extends PircBot {
 				sourceHostname);
 		for (IRCPlugin plugin : Enterence.PluginPool) {
 			try {
-				plugin.onRemoveNoExternalMessages(channel, sourceNick, sourceLogin, sourceHostname);
+				plugin.onRemoveNoExternalMessages(channel, sourceNick,
+						sourceLogin, sourceHostname);
 			} catch (Exception e) {
 				Gui.displayException(e);
 				Gui.log("Internal Error when handling " + plugin.getName());
@@ -900,7 +921,8 @@ public class MyBot extends PircBot {
 		super.onSetInviteOnly(channel, sourceNick, sourceLogin, sourceHostname);
 		for (IRCPlugin plugin : Enterence.PluginPool) {
 			try {
-				plugin.onSetInviteOnly(channel, sourceNick, sourceLogin, sourceHostname);
+				plugin.onSetInviteOnly(channel, sourceNick, sourceLogin,
+						sourceHostname);
 			} catch (Exception e) {
 				Gui.displayException(e);
 				Gui.log("Internal Error when handling " + plugin.getName());
@@ -916,7 +938,8 @@ public class MyBot extends PircBot {
 				sourceHostname);
 		for (IRCPlugin plugin : Enterence.PluginPool) {
 			try {
-				plugin.onRemoveInviteOnly(channel, sourceNick, sourceLogin, sourceHostname);
+				plugin.onRemoveInviteOnly(channel, sourceNick, sourceLogin,
+						sourceHostname);
 			} catch (Exception e) {
 				Gui.displayException(e);
 				Gui.log("Internal Error when handling " + plugin.getName());
@@ -931,7 +954,8 @@ public class MyBot extends PircBot {
 		super.onSetModerated(channel, sourceNick, sourceLogin, sourceHostname);
 		for (IRCPlugin plugin : Enterence.PluginPool) {
 			try {
-				plugin.onSetModerated(channel, sourceNick, sourceLogin, sourceHostname);
+				plugin.onSetModerated(channel, sourceNick, sourceLogin,
+						sourceHostname);
 			} catch (Exception e) {
 				Gui.displayException(e);
 				Gui.log("Internal Error when handling " + plugin.getName());
@@ -947,7 +971,8 @@ public class MyBot extends PircBot {
 				sourceHostname);
 		for (IRCPlugin plugin : Enterence.PluginPool) {
 			try {
-				plugin.onRemoveModerated(channel, sourceNick, sourceLogin, sourceHostname);
+				plugin.onRemoveModerated(channel, sourceNick, sourceLogin,
+						sourceHostname);
 			} catch (Exception e) {
 				Gui.displayException(e);
 				Gui.log("Internal Error when handling " + plugin.getName());
@@ -962,7 +987,8 @@ public class MyBot extends PircBot {
 		super.onSetPrivate(channel, sourceNick, sourceLogin, sourceHostname);
 		for (IRCPlugin plugin : Enterence.PluginPool) {
 			try {
-				plugin.onSetPrivate(channel, sourceNick, sourceLogin, sourceHostname);
+				plugin.onSetPrivate(channel, sourceNick, sourceLogin,
+						sourceHostname);
 			} catch (Exception e) {
 				Gui.displayException(e);
 				Gui.log("Internal Error when handling " + plugin.getName());
@@ -977,7 +1003,8 @@ public class MyBot extends PircBot {
 		super.onRemovePrivate(channel, sourceNick, sourceLogin, sourceHostname);
 		for (IRCPlugin plugin : Enterence.PluginPool) {
 			try {
-				plugin.onRemovePrivate(channel, sourceNick, sourceLogin, sourceHostname);
+				plugin.onRemovePrivate(channel, sourceNick, sourceLogin,
+						sourceHostname);
 			} catch (Exception e) {
 				Gui.displayException(e);
 				Gui.log("Internal Error when handling " + plugin.getName());
@@ -992,7 +1019,8 @@ public class MyBot extends PircBot {
 		super.onSetSecret(channel, sourceNick, sourceLogin, sourceHostname);
 		for (IRCPlugin plugin : Enterence.PluginPool) {
 			try {
-				plugin.onSetSecret(channel, sourceNick, sourceLogin, sourceHostname);
+				plugin.onSetSecret(channel, sourceNick, sourceLogin,
+						sourceHostname);
 			} catch (Exception e) {
 				Gui.displayException(e);
 				Gui.log("Internal Error when handling " + plugin.getName());
@@ -1007,7 +1035,8 @@ public class MyBot extends PircBot {
 		super.onRemoveSecret(channel, sourceNick, sourceLogin, sourceHostname);
 		for (IRCPlugin plugin : Enterence.PluginPool) {
 			try {
-				plugin.onRemoveSecret(channel, sourceNick, sourceLogin, sourceHostname);
+				plugin.onRemoveSecret(channel, sourceNick, sourceLogin,
+						sourceHostname);
 			} catch (Exception e) {
 				Gui.displayException(e);
 				Gui.log("Internal Error when handling " + plugin.getName());
@@ -1023,7 +1052,8 @@ public class MyBot extends PircBot {
 				channel);
 		for (IRCPlugin plugin : Enterence.PluginPool) {
 			try {
-				plugin.onInvite(targetNick, sourceNick, sourceLogin, sourceHostname, channel);
+				plugin.onInvite(targetNick, sourceNick, sourceLogin,
+						sourceHostname, channel);
 			} catch (Exception e) {
 				Gui.displayException(e);
 				Gui.log("Internal Error when handling " + plugin.getName());
@@ -1040,7 +1070,8 @@ public class MyBot extends PircBot {
 				filename, address, port, size);
 		for (IRCPlugin plugin : Enterence.PluginPool) {
 			try {
-				plugin.onDccSendRequest(sourceNick, sourceLogin, sourceHostname, filename, address, port, size);
+				plugin.onDccSendRequest(sourceNick, sourceLogin,
+						sourceHostname, filename, address, port, size);
 			} catch (Exception e) {
 				Gui.displayException(e);
 				Gui.log("Internal Error when handling " + plugin.getName());
@@ -1056,7 +1087,8 @@ public class MyBot extends PircBot {
 				address, port);
 		for (IRCPlugin plugin : Enterence.PluginPool) {
 			try {
-				plugin.onDccChatRequest(sourceNick, sourceLogin, sourceHostname, address, port);
+				plugin.onDccChatRequest(sourceNick, sourceLogin,
+						sourceHostname, address, port);
 			} catch (Exception e) {
 				Gui.displayException(e);
 				Gui.log("Internal Error when handling " + plugin.getName());
@@ -1113,7 +1145,8 @@ public class MyBot extends PircBot {
 		super.onVersion(sourceNick, sourceLogin, sourceHostname, target);
 		for (IRCPlugin plugin : Enterence.PluginPool) {
 			try {
-				plugin.onVersion(sourceNick, sourceLogin, sourceHostname, target);
+				plugin.onVersion(sourceNick, sourceLogin, sourceHostname,
+						target);
 			} catch (Exception e) {
 				Gui.displayException(e);
 				Gui.log("Internal Error when handling " + plugin.getName());
@@ -1128,7 +1161,8 @@ public class MyBot extends PircBot {
 		super.onPing(sourceNick, sourceLogin, sourceHostname, target, pingValue);
 		for (IRCPlugin plugin : Enterence.PluginPool) {
 			try {
-				plugin.onPing(sourceNick, sourceLogin, sourceHostname, target, pingValue);
+				plugin.onPing(sourceNick, sourceLogin, sourceHostname, target,
+						pingValue);
 			} catch (Exception e) {
 				Gui.displayException(e);
 				Gui.log("Internal Error when handling " + plugin.getName());

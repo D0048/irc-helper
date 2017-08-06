@@ -13,5 +13,7 @@
 	<classpathentry kind="lib" path="/home/d0048/Program-code/netbean-java/irc-helper/dependencies/commons-logging-1.1.1.jar"/>
 	<classpathentry kind="lib" path="/home/d0048/Program-code/netbean-java/irc-helper/dependencies/httpmime-4.4.1.jar"/>
 	<classpathentry kind="lib" path="/home/d0048/Program-code/netbean-java/irc-helper/dependencies/httpclient-4.4.1.jar"/>
+	<classpathentry kind="lib" path="/home/d0048/Program-code/netbean-java/irc-helper/dependencies/httpcore-4.4.1.jar"/>
+	<classpathentry kind="lib" path="/home/d0048/Program-code/netbean-java/irc-helper/dependencies/json-20160810.jar"/>
 	<classpathentry kind="output" path=""/>
 </classpath>

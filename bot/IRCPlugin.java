@@ -4,18 +4,21 @@ import org.jibble.pircbot.DccChat;
 import org.jibble.pircbot.DccFileTransfer;
 import org.jibble.pircbot.User;
 
+import enterence.Enterence;
+import gui.Gui;
+
 public class IRCPlugin {
 	protected String name = "Unimplemented plugin";
 
 	public String getName() {
 		return name;
 	}
-	
-	public void onUnload(){
-		
+
+	public void onUnload() {
+		Gui.log("Unloading"+this.name);
 	}
 
-	public void onPublicCall(String channel, String sender, String login,
+	public void onHelp(String channel, String sender, String login,
 			String hostname, String message, String args[]) {
 
 	}
@@ -24,18 +27,19 @@ public class IRCPlugin {
 			String message, String args[]) {
 
 	}
-	
+
 	public void onSudoCall(String sender, String login, String hostname,
 			String message, String args[]) {
-		
+
 	}
-	
+
 	public void onCall(String channel, String sender, String login,
 			String hostname, String message, String args[]) {
-		
+
 	}
 
 	public boolean onLoad() {
+		Gui.log("Loading"+this.name);
 		return true;
 	}
 

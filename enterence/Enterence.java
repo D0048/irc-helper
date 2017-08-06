@@ -3,6 +3,10 @@ package enterence;
 import java.util.HashSet;
 import java.util.Properties;
 
+import ocrPlugin.OCRPlugin;
+
+import tlPlugin.TLPlugin;
+
 import function.NetSocket;
 import gui.Gui;
 import bot.Configs;
@@ -24,7 +28,7 @@ public class Enterence {
 	public static Records records = new Records();
 	public static HashSet<String[]> APMPool = new HashSet<String[]>();
 	public static HashSet<NetSocket> NSPool = new HashSet<NetSocket>();
-	public static HashSet<? extends IRCPlugin> PluginPool = new HashSet<IRCPlugin>();
+	public static HashSet<IRCPlugin> PluginPool = new HashSet<IRCPlugin>();
 	Properties prop = new Properties();
 	public static MyBot bot;
 
@@ -77,6 +81,7 @@ public class Enterence {
 			bot.joinChannel(channel);
 		}
 		
+		PluginPool.add(new OCRPlugin());
 		//plugin load
 		Gui.log("Loading plugins");
 		for(IRCPlugin plugin : PluginPool){
