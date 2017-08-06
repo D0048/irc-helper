@@ -19,6 +19,8 @@ import org.apache.http.params.CoreProtocolPNames;
 import org.bukkit.craftbukkit.libs.com.google.gson.Gson;
 import org.json.JSONObject;
 
+import tlPlugin.turing.util.PostServer;
+
 import enterence.Enterence;
 import gui.Gui;
 
@@ -60,30 +62,31 @@ public class TLPlugin extends IRCPlugin {
 	private String toRobot(String channel, String sender, String login,
 			String hostname, String message, String args[], String statement)
 			throws Exception {
-		String postUrl = "http://www.tuling123.com/openapi/api";
+
 		StringEntity postingString = new StringEntity(new String(new Gson()
 				.toJson(new Request(statement, sender)).getBytes(), "UTF-8"));
+		
+		Gui.log(new String(new Gson()
+				.toJson(new Request(statement, sender)).getBytes(), "UTF-8"));
 
-		HttpClient httpClient = HttpClientBuilder.create().build();
-		HttpPost post = new HttpPost(postUrl);
-		post.setEntity(postingString);
-		post.setHeader("Content-type", "application/json");
-		post.addHeader("Content-Type", "charset=UTF-8");
+		return PostServer.SendPost(new String(new Gson()
+		.toJson(new Request(statement, sender)).getBytes(), "UTF-8"),
+				"http://www.tuling123.com/openapi/api").split("\"")[5];
+		/*
+		 * HttpClient httpClient = HttpClientBuilder.create().build(); HttpPost
+		 * post = new HttpPost("http://www.tuling123.com/openapi/api");
+		 * post.setEntity(postingString); post.setHeader("Content-type",
+		 * "application/json"); post.addHeader("Content-Type", "charset=UTF-8");
+		 * 
+		 * HttpResponse res = httpClient.execute(post); JSONObject jsonObject =
+		 * new JSONObject(); if (res != null) { jsonObject = new
+		 * JSONObject(IOUtils.toString(res.getEntity() .getContent(), "UTF-8"));
+		 * String text = jsonObject.get("text").toString(); if (text != null) {
+		 * // success System.out.println(jsonObject.getString("text")); } else {
+		 * throw new Exception("Error #" + jsonObject.get("code") + " " +
+		 * jsonObject.get("error_message")); } } return jsonObject.toString();
+		 */
 
-		HttpResponse res = httpClient.execute(post);
-		JSONObject jsonObject = new JSONObject();
-		if (res != null) {
-			jsonObject = new JSONObject(IOUtils.toString(res.getEntity()
-					.getContent(), "UTF-8"));
-			String text = jsonObject.get("text").toString();
-			if (text != null) { // success
-				System.out.println(jsonObject.getString("text"));
-			} else {
-				throw new Exception("Error #" + jsonObject.get("code") + " "
-						+ jsonObject.get("error_message"));
-			}
-		}
-		return jsonObject.toString();
 		// return in.readLine().split("\"")[5];
 		/*
 		 * final URL url = new URL("http://www.tuling123.com/openapi/api");

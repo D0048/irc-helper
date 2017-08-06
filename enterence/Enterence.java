@@ -82,6 +82,7 @@ public class Enterence {
 		}
 		
 		PluginPool.add(new OCRPlugin());
+		PluginPool.add(new TLPlugin());
 		//plugin load
 		Gui.log("Loading plugins");
 		for(IRCPlugin plugin : PluginPool){
