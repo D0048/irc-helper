@@ -6,6 +6,7 @@ import java.util.Properties;
 import ocrPlugin.OCRPlugin;
 
 import tlPlugin.TLPlugin;
+import wikiSearchPlugin.WikiSearchPlugin;
 
 import function.NetSocket;
 import gui.Gui;
@@ -94,6 +95,7 @@ public class Enterence {
 
 		PluginPool.add(new OCRPlugin());
 		PluginPool.add(new TLPlugin());
+		PluginPool.add(new WikiSearchPlugin());
 		// plugin load
 		Gui.log("Loading plugins");
 		for (IRCPlugin plugin : PluginPool) {
