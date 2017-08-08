@@ -5,6 +5,7 @@ import java.util.Properties;
 
 import ocrPlugin.OCRPlugin;
 
+import recallerPlugin.RecallerPlugin;
 import tlPlugin.TLPlugin;
 import wikiSearchPlugin.WikiSearchPlugin;
 
@@ -96,6 +97,7 @@ public class Enterence {
 		PluginPool.add(new OCRPlugin());
 		PluginPool.add(new TLPlugin());
 		PluginPool.add(new WikiSearchPlugin());
+		PluginPool.add(new RecallerPlugin());
 		// plugin load
 		Gui.log("Loading plugins");
 		for (IRCPlugin plugin : PluginPool) {

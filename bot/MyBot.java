@@ -45,9 +45,8 @@ public class MyBot extends PircBot {
 			// apm handle
 			this.priFuncAnonymousHandle(channel, sender, login, hostname,
 					message, message.split(" "));
-			this.funcRecord(channel, sender, login, hostname, message,
-					message.split(" "));
-
+			
+			//plugins handle
 			for (IRCPlugin plugin : Enterence.PluginPool) {
 				try {
 					plugin.onMessage(channel, sender, login, hostname, message);
@@ -175,7 +174,7 @@ public class MyBot extends PircBot {
 			return;
 		}
 
-		if (message.startsWith(Configs.preffix + "recall")) {
+		/*if (message.startsWith(Configs.preffix + "recall")) {			#**moved to plugin**
 			this.funcRegexReCall(channel, sender, login, hostname, message,
 					args, false);
 			return;
@@ -184,7 +183,7 @@ public class MyBot extends PircBot {
 			this.funcRegexReCall(channel, sender, login, hostname, message,
 					args, true);
 			return;
-		}
+		}*/
 		if (message.startsWith(Configs.preffix + "time")) {
 			this.funcTime(channel, sender, login, hostname, message, args);
 			return;
@@ -406,12 +405,6 @@ public class MyBot extends PircBot {
 		this.sendMessage(sender, "Normal commands:\n");
 		this.sendMessage(sender, "-help 							Show this help");
 		this.sendMessage(sender, "-ping 							Check if bot is alive");
-		this.sendMessage(
-				sender,
-				"-recall [user] [statement] 	Recall certain phases in the chat history of a user\n");
-		this.sendMessage(
-				sender,
-				"-regrecall [user] [keyword] 	Recall certain phases using regex in the chat history of a user\n");
 		this.sendMessage(sender, "-time 							Get current time");
 		this.sendMessage(sender, "-md5 [msg] 					Encrypt a message with md5\n");
 		this.sendMessage(sender,
