@@ -8,7 +8,6 @@ import gui.Gui;
 
 public class MyConfig {
 	File file = new File(Enterence.propFileName);
-	
 
 	public void configInit(String[] args) throws Exception {
 		/*
@@ -32,14 +31,17 @@ public class MyConfig {
 				Configs.sudoPwd = (String) config.getString("sudoPwd");
 				Configs.server = (String) config.getString("server");
 				Configs.name = (String) config.getString("name");
+				Configs.pwd = (String) config.getString("pwd");
 				Configs.channels = (String[]) config.getStringArray("channels");
 				Configs.preffix = (String) config.getString("preffix");
 				Configs.sudoers = (String[]) config.getStringArray("sudoers");
-				Configs.recordFileName = (String) config.getString("recordFileName");
+				Configs.recordFileName = (String) config
+						.getString("recordFileName");
 				if (Configs.sudoers == null || Configs.sudoPwd == null
 						|| Configs.server == null || Configs.name == null
-						|| Configs.channels == null || Configs.preffix == null
-						|| Configs.sudoers == null || Configs.recordFileName == null) {
+						|| Configs.pwd == null || Configs.channels == null
+						|| Configs.preffix == null || Configs.sudoers == null
+						|| Configs.recordFileName == null) {
 					throw new Exception("File damaged");
 				}
 			} catch (Exception e) {
@@ -56,8 +58,8 @@ public class MyConfig {
 	}
 
 	public void createDefault() throws Exception {
-		if(file.exists()){
-			file.renameTo(new File(Enterence.propFileName+".bak"));
+		if (file.exists()) {
+			file.renameTo(new File(Enterence.propFileName + ".bak"));
 		}
 		file.createNewFile();
 		PropertiesConfiguration config = new PropertiesConfiguration(
@@ -66,6 +68,7 @@ public class MyConfig {
 		config.setProperty("sudoPwd", Configs.sudoPwd);
 		config.setProperty("server", Configs.server);
 		config.setProperty("name", Configs.name);
+		config.setProperty("pwd", Configs.pwd);
 		config.setProperty("channels", Configs.channels);
 		config.setProperty("preffix", Configs.preffix);
 		config.setProperty("sudoers", Configs.sudoers);

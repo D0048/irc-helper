@@ -88,6 +88,7 @@ public class Enterence {
 			}
 		} while (!success);
 
+		bot.sendMessage("NickServ", "identify" + " " + Configs.pwd);
 		// Join the #pircbot channel.
 		for (String channel : Configs.channels) {
 			Gui.log("Joining: " + channel + "\n");
