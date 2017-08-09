@@ -23,27 +23,84 @@ public class MyConfig {
 		 */
 
 		if (file.exists()) {
+			boolean isDamaged = false;
 			Gui.log("Config file found, start loading");
+
 			try {
 				PropertiesConfiguration config = new PropertiesConfiguration(
 						Enterence.propFileName);
+				if (config.getStringArray("sudoers") == null) {
+					config.setProperty("sudoers", Configs.sudoers);
+					isDamaged = true;
+				}
 				Configs.sudoers = config.getStringArray("sudoers");
+
+				if (config.getString("sudoPwd") == null) {
+					config.setProperty("sudoPwd", Configs.sudoPwd);
+					isDamaged = true;
+				}
 				Configs.sudoPwd = (String) config.getString("sudoPwd");
+
+				if (config.getString("server") == null) {
+					config.setProperty("server", Configs.server);
+					isDamaged = true;
+				}
 				Configs.server = (String) config.getString("server");
+
+				if (config.getString("name") == null) {
+					config.setProperty("name", Configs.name);
+					isDamaged = true;
+				}
 				Configs.name = (String) config.getString("name");
+
+				if (config.getString("pwd") == null) {
+					config.setProperty("pwd", Configs.pwd);
+					isDamaged = true;
+				}
 				Configs.pwd = (String) config.getString("pwd");
+
+				if (config.getStringArray("channels") == null) {
+					config.setProperty("channels", Configs.channels);
+					isDamaged = true;
+				}
 				Configs.channels = (String[]) config.getStringArray("channels");
+
+				if (config.getString("preffix") == null) {
+					config.setProperty("preffix", Configs.preffix);
+					isDamaged = true;
+				}
 				Configs.preffix = (String) config.getString("preffix");
+
+				if (config.getStringArray("sudoers") == null) {
+					config.setProperty("sudoers", Configs.sudoers);
+					isDamaged = true;
+				}
 				Configs.sudoers = (String[]) config.getStringArray("sudoers");
+
+				if (config.getString("recordFileName") == null) {
+					config.setProperty("recordFileName", Configs.recordFileName);
+					isDamaged = true;
+				}
 				Configs.recordFileName = (String) config
 						.getString("recordFileName");
-				if (Configs.sudoers == null || Configs.sudoPwd == null
-						|| Configs.server == null || Configs.name == null
-						|| Configs.pwd == null || Configs.channels == null
-						|| Configs.preffix == null || Configs.sudoers == null
-						|| Configs.recordFileName == null) {
-					throw new Exception("File damaged");
+
+				if (config.getString("useProxy") == null) {
+					config.setProperty("useProxy", Configs.useProxy);
+					isDamaged = true;
 				}
+				Configs.useProxy = (String) config.getString("useProxy");
+
+				if (config.getString("Proxy") == null) {
+					config.setProperty("Proxy", Configs.Proxy);
+					isDamaged = true;
+				}
+				Configs.Proxy = (String) config.getString("Proxy");
+
+				if (isDamaged) {
+					// throw new Exception("File damaged");
+					Gui.log("File damaged. Defaut override");
+				}
+				config.save();
 			} catch (Exception e) {
 				Gui.displayException(e);
 				Gui.log("Config file error: " + e.getMessage()
@@ -73,6 +130,8 @@ public class MyConfig {
 		config.setProperty("preffix", Configs.preffix);
 		config.setProperty("sudoers", Configs.sudoers);
 		config.setProperty("recordFileName", Configs.recordFileName);
+		config.setProperty("useProxy", Configs.useProxy);
+		config.setProperty("Proxy", Configs.Proxy);
 		config.save();
 	}
 }

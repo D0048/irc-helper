@@ -9,4 +9,6 @@ public class Configs {
 	public static String[] channels = { "#berton-research", "#linuxba" };
 	public static String preffix = "-";
 	public static String recordFileName = "helper.record";
+	public static String useProxy = "0";
+	public static String Proxy = "127.0.0.1:1080";
 }

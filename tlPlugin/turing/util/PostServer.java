@@ -1,22 +1,29 @@
 package tlPlugin.turing.util;
 
+import gui.Gui;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
+import java.net.InetSocketAddress;
+import java.net.Proxy;
 import java.net.URL;
+
+import bot.Configs;
 
 /**
  * HTTP工具类
+ * 
  * @author 图灵机器人
- *
+ * 
  */
 public class PostServer {
-	
+
 	/**
 	 * 向后台发送post请求
+	 * 
 	 * @param param
 	 * @param url
 	 * @return
@@ -25,10 +32,22 @@ public class PostServer {
 		OutputStreamWriter out = null;
 		BufferedReader in = null;
 		String result = "";
+		Proxy proxy = null;
 		try {
+			if (Configs.useProxy == "1") {
+				proxy = new Proxy(Proxy.Type.SOCKS, new InetSocketAddress(
+						Configs.Proxy.split(":")[0],
+						Integer.parseInt(Configs.Proxy.split(":")[1])));
+				Gui.log("Using proxy" + proxy.toString());
+			}
 			URL realUrl = new URL(url);
-			HttpURLConnection conn = (HttpURLConnection) realUrl
-					.openConnection();
+			HttpURLConnection conn;
+			if (Configs.useProxy == "1" && proxy != null) {
+				conn = (HttpURLConnection) realUrl.openConnection(proxy);
+			} else {
+				conn = (HttpURLConnection) realUrl.openConnection();
+			}
+
 			conn.setDoOutput(true);
 			conn.setDoInput(true);
 			conn.setUseCaches(false);

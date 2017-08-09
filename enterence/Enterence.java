@@ -3,6 +3,8 @@ package enterence;
 import java.util.HashSet;
 import java.util.Properties;
 
+import ddkPlugin.DDKPlugin;
+
 import ocrPlugin.OCRPlugin;
 
 import recallerPlugin.RecallerPlugin;
@@ -71,6 +73,27 @@ public class Enterence {
 			Gui.displayException(e);
 		}
 
+		System.setProperty("java.net.useSystemProxies", "true");
+		try {
+			Gui.log("Proxy:" + Configs.useProxy);
+			if (Configs.useProxy == "1") {
+				Gui.log("Loading proxies(support socks only)");
+				String ip = Configs.Proxy.split(":")[0];
+				String port = Configs.Proxy.split(":")[1];
+				if (ip != null && port != null) {
+					Gui.log("Proxy:" + ip + "|" + port);
+				} else {
+					Gui.displayException(new Exception(
+							"Wrong proxy format, use host:port"));
+					Configs.useProxy = "0";
+				}
+			}
+		} catch (Exception e) {
+			Gui.displayException(e);
+			Gui.log("Error setting proxy, fallback");
+			Configs.useProxy = "0";
+		}
+
 		bot = new MyBot(Configs.name, Configs.preffix);
 		// Enable debugging output.
 		bot.setVerbose(true);
@@ -99,6 +122,8 @@ public class Enterence {
 		PluginPool.add(new TLPlugin());
 		PluginPool.add(new WikiSearchPlugin());
 		PluginPool.add(new RecallerPlugin());
+		PluginPool.add(new DDKPlugin());
+
 		// plugin load
 		Gui.log("Loading plugins");
 		for (IRCPlugin plugin : PluginPool) {
