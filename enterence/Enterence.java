@@ -111,7 +111,14 @@ public class Enterence {
 			}
 		} while (!success);
 
+		// identification
 		bot.sendMessage("NickServ", "identify" + " " + Configs.pwd);
+		try {
+			Thread.sleep(3L);
+		} catch (Exception e) {
+			Gui.displayException(e);
+		}
+
 		// Join the #pircbot channel.
 		for (String channel : Configs.channels) {
 			Gui.log("Joining: " + channel + "\n");

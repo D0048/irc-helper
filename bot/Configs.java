@@ -6,7 +6,7 @@ public class Configs {
 	public static String server = "irc.freenode.net";
 	public static String name = "testbot";
 	public static String pwd = "123123";
-	public static String[] channels = { "#berton-research", "#linuxba" };
+	public static String[] channels = { "#berton-research" };
 	public static String preffix = "-";
 	public static String recordFileName = "helper.record";
 	public static String useProxy = "0";
