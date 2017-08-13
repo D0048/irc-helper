@@ -114,7 +114,8 @@ public class Enterence {
 		// identification
 		bot.sendMessage("NickServ", "identify" + " " + Configs.pwd);
 		try {
-			Thread.sleep(3L);
+			Gui.log("Waiting for identification: 0s");
+			Thread.sleep(0L);
 		} catch (Exception e) {
 			Gui.displayException(e);
 		}
