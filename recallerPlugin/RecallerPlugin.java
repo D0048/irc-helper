@@ -48,17 +48,35 @@ public class RecallerPlugin extends IRCPlugin {
 		Enterence.bot
 				.sendMessage(
 						sender,
-						"-recall [user] [statement] 	Recall certain phases in the chat history of a user\n");
+						"-recall [user] [statement] [amount] Recall certain phases in the chat history of a user\n");
 		Enterence.bot
 				.sendMessage(
 						sender,
-						"-regrecall [user] [keyword] 	Recall certain phases using regex in the chat history of a user\n");
+						"-regrecall [user] [keyword] [amount] Recall certain phases using regex in the chat history of a user\n");
 	}
 
 	public void funcRegexReCall(String channel, String sender, String login,
 			String hostname, String message, String args[], boolean regex) {
+		int maxout = 3;
 		String targetUsr = args[1];
-		String targetContent = args[2];
+		String targetContent = "";
+
+		for (int i = 0; i < args.length; i++) {
+			if (i == 0)
+				continue;
+			if (i == 1)
+				continue;
+			if (i == args.length - 1) {
+				try {
+					maxout = Integer.parseInt(args[i]);
+					break;
+				} catch (Exception e) {
+					break;
+				}
+			}
+			targetContent += args[i];
+		}
+
 		Enterence.bot.sendMessage(channel, ": Searching for " + targetContent
 				+ " in " + targetUsr);
 		if (Records.records.containsKey(targetUsr)) {// usr
@@ -80,15 +98,28 @@ public class RecallerPlugin extends IRCPlugin {
 					matches.add(statement);
 				}
 			}
-			
+
 			if (matches.size() == 0) {
 				Enterence.bot.sendMessage(channel,
 						": Search failed: content not found");
 				return;
 			} else {
-				int maxout = 5;
+				boolean pm = false;
+				if (maxout > 2) {
+					pm = true;
+					Enterence.bot.sendMessage(channel, sender
+							+ ", msg sent through private chat.");
+				}
+				if (maxout > 15) {
+					Enterence.bot.sendMessage(channel, sender
+							+ ", Rejected: jamming!");
+					return;
+				}
 				for (String statement : matches) {
-					Enterence.bot.sendMessage(channel, statement);
+					if (!pm)
+						Enterence.bot.sendMessage(channel, statement);
+					else
+						Enterence.bot.sendMessage(sender, statement);
 					maxout--;
 					if (maxout == 0)
 						return;

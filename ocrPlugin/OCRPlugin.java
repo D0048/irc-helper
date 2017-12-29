@@ -32,6 +32,7 @@ public class OCRPlugin extends IRCPlugin {
 				try {
 					reply = this.link2Str(channel, sender, login, hostname,
 							message, args, args[1]).split("\"")[3];
+					reply = reply.replace("\\n", " ");
 				} catch (Exception e) {
 					reply = e.getMessage();
 				}
@@ -45,7 +46,8 @@ public class OCRPlugin extends IRCPlugin {
 			String hostname, String message, String[] args) {
 		super.onHelp(channel, sender, login, hostname, message, args);
 		Enterence.bot.sendMessage(sender, "---OCR Plugin---");
-		Enterence.bot.sendMessage(sender, "-ocr [pic_url] 					turn an image into English text");
+		Enterence.bot.sendMessage(sender,
+				"-ocr [pic_url] 					turn an image into English text");
 	}
 
 	@Override

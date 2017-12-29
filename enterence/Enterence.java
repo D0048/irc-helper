@@ -6,6 +6,7 @@ import java.util.Properties;
 import ddkPlugin.DDKPlugin;
 
 import ocrPlugin.OCRPlugin;
+import pluginManager.PluginManager;
 
 import recallerPlugin.RecallerPlugin;
 import tlPlugin.TLPlugin;
@@ -24,6 +25,7 @@ public class Enterence {
 	// TODO:serilize record
 	// TODO:add robot
 	// TODO:pluginlize
+	// TODO:auto encoding detection
 
 	public static String propFileName = "helper.properties";
 	public static MyConfig config = new MyConfig();
@@ -35,12 +37,12 @@ public class Enterence {
 	public static HashSet<IRCPlugin> PluginPool = new HashSet<IRCPlugin>();
 	Properties prop = new Properties();
 	public static MyBot bot;
+	public static PluginManager pluginManager;
 
 	/**
 	 * @param args
 	 */
 	public static void main(String[] args) {
-
 		Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
 			public void run() {
 				try {
@@ -63,7 +65,7 @@ public class Enterence {
 			}
 		}));
 
-		Gui.startGui(args);
+		// Gui.startGui(args);
 		try {
 			Gui.log("Loading config file");
 			config.configInit(args);
@@ -125,6 +127,11 @@ public class Enterence {
 			Gui.log("Joining: " + channel + "\n");
 			bot.joinChannel(channel);
 		}
+
+		// the new load
+		pluginManager = new PluginManager();
+
+		// plugin add
 
 		PluginPool.add(new OCRPlugin());
 		PluginPool.add(new TLPlugin());

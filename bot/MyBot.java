@@ -486,6 +486,33 @@ public class MyBot extends PircBot {
 				Gui.displayException(e);
 				Gui.log("Internal Error when handling " + plugin.getName());
 			}
+			boolean success = false;
+			do {
+				try {
+					Gui.log("Connecting to: " + Configs.server + "\n");
+					this.connect(Configs.server);
+					success = true;
+					Gui.log("Successfully connected, now joining channel list!"
+							+ Configs.channels.toString() + "\n");
+				} catch (Exception e) {
+					Gui.displayException(e);
+				}
+			} while (!success);
+
+			// identification
+			this.sendMessage("NickServ", "identify" + " " + Configs.pwd);
+			try {
+				Gui.log("Waiting for identification: 0s");
+				Thread.sleep(0L);
+			} catch (Exception e) {
+				Gui.displayException(e);
+			}
+
+			// Join the #pircbot channel.
+			for (String channel : Configs.channels) {
+				Gui.log("Joining: " + channel + "\n");
+				this.joinChannel(channel);
+			}
 		}
 	}
 
